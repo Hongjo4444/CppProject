@@ -14,7 +14,7 @@ constexpr int w = 20;
 
 bool initPage(int& choice);
 bool createAccountPage(string& name, int& id, char& gender, string& job);
-bool keyin(T& n, string errMsg);
+template<class T> bool keyin(T& n, string errMsg);
 bool getPerson(EmployManage& mngr, Person &p, string cmdMsg, string errMsg);
 int funcPage();
 
@@ -24,10 +24,12 @@ int main(){
     EmployManage mngr;
     Person p, p2;
     string name, job, type;
-    int id, amount, choice, balance, driverId, fee;
+    int id, amount, choice, balance, driverId;
     char gender;
     vector<Person>::iterator it;
     choice = -1;
+    int i = 0;
+                    
     srand((unsigned)time(NULL));
             
     while (true){
@@ -71,21 +73,32 @@ int main(){
                     cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.showAccount(p) << "원" << endl;
                     break;
                 case 3: // 택시 이용
-                    // cout << "이용할 택시 종류 선택 [우등/일반] >>";
-                    // cin >> type;
-                    // fee = calcAmount(); // 거리입력해서 요금 먼저 확인함
-                    // balance = banker.showAccount(p); // 현재 계좌잔액으로 비교해서
-                    // if (balance < fee){
-                    //     cout << "잔액부족으로 승차가 거부되었습니다" << endl;
-                    //     break;
-                    // }
-                        
-
-
-                    // driverId = mngr.selectDriver(type);
-                    // p2 = *(mngr.getPerson(driverId));
-                    
-                    // calcAmount()
+                    cout << "이용할 택시 종류 선택 [우등/일반] >>";
+                    cin >> type;
+                    driverId = mngr.selectDriver(type);
+                    p2 = *(mngr.getPerson(driverId));
+                    amount = p2.calcAmount(); // 거리입력해서 요금 먼저 확인함
+                    cout << ">> 요금은 " << amount << "[원] 입니다." << endl;
+                    balance = banker.showAccount(p); // 현재 계좌잔액으로 비교해서
+                    if (balance < amount){
+                        cout << "잔액부족으로 승차가 거부되었습니다" << endl;
+                        break;
+                    }
+                    cout << ">> " << p2.getName() << " 기사님이 선정되었습니다" << endl;
+                    cout << ">> 이동 중";
+                    i = 0;
+                    while (1){
+                        if(i%100000==0) {
+                            putchar('.');
+                            fflush(stdout);
+                            //i=0;
+                        }else if (i==400000)
+                            break;
+                        i++;
+                    }
+                    cout << "\n>> 결제가 진행됩니다" << endl;
+                    banker.sendMoney(p, p2, amount);
+                    cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.showAccount(p) << "원" << endl;
                     break;
                 case 4: // 미용실 이용
                     break;
@@ -197,9 +210,10 @@ int funcPage(){
         cout << "3. 택시 부르기" << endl;
         cout << "4. 미용실 가기" << endl;
         cout << setw(w) << setfill('-') << '-' << endl;
-        if (keyin(choice, "ID는 숫자로만 기입 바랍니다."))
+        if (keyin(choice, "ID는 숫자로만 기입 바랍니다.")){
             if (1 <= choice && choice <= 4)
                 break;
+        }
     }
     return choice;
 }
