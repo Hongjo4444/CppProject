@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 using namespace std;
@@ -11,6 +12,7 @@ public:
     void delEmployee(Person p);
     void showList();
     //int calcAmount();  필요없는 듯
-    Person* getPerson(int id); // Person*로 바꿈
+    vector<Person>::iterator getPerson(int id); // Person*로 바꿈
+    vector<Person>::iterator getPerson(string name);
     int selectDriver(string type);
-}
+};

@@ -1,7 +1,11 @@
-#include <string>
+#include <iostream>
+#include <iomanip>
 using namespace std;
-#include "person.h"
+#include "salon.h"
 
+
+SalonDesigner::SalonDesigner(string name, int id, char gender, string job)
+ : Person(name, id, gender, job) { }
 
 void SalonDesigner::showMenu()
 {
