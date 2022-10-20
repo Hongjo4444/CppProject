@@ -108,15 +108,14 @@ void Bank::delAccount(Person p){
 }
 
 void Bank::showAllAccount(){
-    auto it;
-    for(it=accountList.begin();it!=accountList.end();it++){
+    for(auto it=accountList.begin();it!=accountList.end();it++){
         if((it->second).size()==2){
             cout << "이름: " << (it->first).getName()
             << "일반 계좌,잔액: " << (it->second)[0].getAccout() << (it->second)[0].getBalance()
             << "카카오 계좌,잔액: " << (it->second)[1].getAccout() << (it->second)[1].getBalance() << endl;
         }
         else{
-            if((it->second)[0].isAccount=="일반 계좌"){
+            if((it->second)[0].isAccount()=="일반 계좌"){
                 cout << "이름: " << (it->first).getName() << "일반 계좌,잔액: " << (it->second)[0].getAccout() << (it->second)[0].getBalance() << endl;
             }
             else{
