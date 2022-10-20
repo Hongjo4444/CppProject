@@ -1,12 +1,10 @@
-#include <string>
+#include <iostream>
 using namespace std;
-#include "person.h"
+#include "taxiDriver.h"
 
 
-string TaxiDriver::getType()
-{
-    return type;
-}
+TaxiDriver::TaxiDriver(string name, int id, char gender, string job, string type) 
+ : Person(name, id, gender, job) { this->type = type; }
 
 int TaxiDriver::calcAmount()
 {
@@ -19,4 +17,9 @@ int TaxiDriver::calcAmount()
     else{
         return initFee + (dist - 2) * feePerMin;
     }
+}
+
+string TaxiDriver::getType()
+{
+    return type;
 }

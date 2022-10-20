@@ -1,7 +1,6 @@
-#include <string>
-#include <vector>
+#include <iostream>
+#include <algorithm>
 using namespace std;
-#include "person.h"
 #include "employManage.h"
 
 bool EmployManage::checkList(string name)
@@ -24,14 +23,14 @@ void EmployManage::addEmployee(Person p)
 
 void EmployManage::delEmployee(Person p)
 {
-    Person* it = getPerson(p.getId());
+    // Person it = getPerson(p.getId());
 
-    if (it == employee_list.end()){
-        cout << "CANNOT DEL - No person : " << p.getName() << endl;
-    }else{
-        employee_list.erase(it);
-        cout << p.getName() << " DELETED" << endl;
-    }
+    // if (it == employee_list.end()){
+    //     cout << "CANNOT DEL - No person : " << p.getName() << endl;
+    // }else{
+    //     employee_list.erase(it);
+    //     cout << p.getName() << " DELETED" << endl;
+    // }
 
 }
 
@@ -42,10 +41,20 @@ void EmployManage::showList()
     }
 }
 
-Person* EmployManage::getPerson(int id)
+vector<Person>::iterator EmployManage::getPerson(int id)
 {
-    auto it = find_if(employee_list.begin(), employee_list.end(), 
+    vector<Person>::iterator it;
+    it = find_if(employee_list.begin(), employee_list.end(), 
                     [id] (Person p) { return (p.getId() == id); }
+                    );
+    return it;
+}
+
+vector<Person>::iterator EmployManage::getPerson(string name)
+{
+    vector<Person>::iterator it;
+    it = find_if(employee_list.begin(), employee_list.end(), 
+                    [name] (Person p) { return (p.getName() == name); }
                     );
     return it;
 }

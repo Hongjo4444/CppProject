@@ -1,27 +1,16 @@
 #include <iostream>
-#include <string>
 using namespace std;
 #include "person.h"
 
-// bool Person::useTaxi(string name)
-// {   
-// }
-// bool Person::useSalon(string name)
-// {
-// }
-// bool Person::useBank(string name)
-// {
-// }
 
-Person::Person (string name, int id, char gender, string job){
+Person::Person(){ }
+
+Person::Person(string name, int id, char gender, string job){
     this->name = name;
     this->id = id;
     this->gender = gender;
     this->job = job;
 }
-
-
-
 
 string Person::getName()
 {
@@ -41,4 +30,12 @@ char Person::getGender()
 string Person::getJob()
 {
     return job;
+}
+
+string Person::getType(){
+    return "";
+}
+
+int Person::calcAmount(){
+    return -1;
 }
