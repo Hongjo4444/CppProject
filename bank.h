@@ -14,10 +14,12 @@ public:
     Bank();
     ~Bank();
     bool makeAccount(Person p, Account& newA);
-    void addAccount(Person p, string accType); // 수정 요
-    void delAccount(Person p, string accType);// 수정 요
+    void addAccount(Person p);
+    void delAccount(Person p);
     void showAllAccount();
-    int showAccount(Person p) { return 1000000000; }
+    void showAccount(map<string,vector<Account>>::iterator it);
+    int getAccountSum(Person p);
+    int getBalanceSum(Person p);
     bool sendMoney(Person pf,Person pt,int m);
     bool recvMoney(Person pt,int m);
 };
