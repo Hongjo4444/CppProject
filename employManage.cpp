@@ -59,19 +59,27 @@ vector<Person>::iterator EmployManage::getPerson(string name)
     return it;
 }
 
-int EmployManage::selectDriver(string type)
+int EmployManage::selectPerson(string type)
 {
     /// 택시운전사의 id 반환
     int n;
     vector<int> candidates; // 해당 type조건에 해당하는 후보 운전사들
 
-    for(Person p: employee_list){
-        if (p.getJob() == "Taxi"){
-            if (p.getType() == type){
+    if (type == ""){
+        for(Person p: employee_list){
+            if (p.getJob() == "미용사")
                 candidates.push_back(p.getId());
+        }
+    }else{
+        for(Person p: employee_list){
+            if (p.getJob() == "택시운전사"){
+                if (p.getType() == type){
+                    candidates.push_back(p.getId());
+                }
             }
         }
     }
+    
 
     n = rand() % candidates.size();
     return candidates[n];

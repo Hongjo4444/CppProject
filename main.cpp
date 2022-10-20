@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cctype>
 #include <exception>
+#include <fstream>
 using namespace std;
 #include "person.h"
 #include "salon.h"
@@ -17,20 +18,29 @@ bool createAccountPage(string& name, int& id, char& gender, string& job);
 template<class T> bool keyin(T& n, string errMsg);
 bool getPerson(EmployManage& mngr, Person &p, string cmdMsg, string errMsg);
 int funcPage();
-
+void fileRead(EmployManage& mngr, ifstream& fin);
+vector<string> parseLine(string line);
 
 int main(){ 
     Bank banker;
     EmployManage mngr;
     Person p, p2;
     string name, job, type, accType;
-    int id, amount, choice, balance, driverId;
+    int id, amount, choice, balance, driverId, designerId;
     char gender;
     vector<Person>::iterator it;
     choice = -1;
     int i = 0;
-                    
     srand((unsigned)time(NULL));
+
+    ifstream fin("data.txt");
+    if (!fin){
+        cout << "data.txt 열 수 없음" << endl;
+    }else{
+        fileRead(mngr, fin);
+        cout << setw(w) << setfill('-') << '-' << endl;
+        mngr.showList();
+    }
             
     while (true){
         while (!initPage(choice)) {}
@@ -55,12 +65,11 @@ int main(){
                 cout << "login 성공: " << p.getName() << endl;
                 switch(funcPage()){
                 case 1: // 계좌 생성
-                    cout << "계좌 유형 선택하세요 [일반/카카오] >>";
-                    cin >> accType;
-                    banker.addAccount(p, accType);
+                    banker.addAccount(p);
+                    break;
                 case 2: // 계좌 송금
                     if (getPerson(mngr, p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
-                    balance = banker.showAccount(p);
+                    balance = banker.getAccountSum(p);
                     cout << "이체 금액 (송금 가능 금액: " << balance << "[원]) >>";
                     while (true){
                         keyin(amount, "이체 금액은 숫자로 입력 바랍니다");
@@ -73,16 +82,16 @@ int main(){
                     }
                     banker.sendMoney(p, p2, amount);
                     cout << ">> " << p.getName() <<"님 계좌에서 " << p2.getName() << "님 계좌로 " << amount << "원 이체가 완료되었습니다." << endl;
-                    cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.showAccount(p) << "원" << endl;
+                    cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
                     break;
                 case 3: // 택시 이용
                     cout << "이용할 택시 종류 선택 [우등/일반] >>";
                     cin >> type;
-                    driverId = mngr.selectDriver(type);
+                    driverId = mngr.selectPerson(type);
                     p2 = *(mngr.getPerson(driverId));
                     amount = p2.calcAmount(); // 거리입력해서 요금 먼저 확인함
                     cout << ">> 요금은 " << amount << "[원] 입니다." << endl;
-                    balance = banker.showAccount(p); // 현재 계좌잔액으로 비교해서
+                    balance = banker.getAccountSum(p); // 현재 계좌잔액으로 비교해서
                     if (balance < amount){
                         cout << "잔액부족으로 승차가 거부되었습니다" << endl;
                         break;
@@ -101,9 +110,23 @@ int main(){
                     }
                     cout << "\n>> 결제가 진행됩니다" << endl;
                     banker.sendMoney(p, p2, amount);
-                    cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.showAccount(p) << "원" << endl;
+                    cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
                     break;
                 case 4: // 미용실 이용
+                    designerId = mngr.selectPerson();
+                    p2 = *(mngr.getPerson(designerId));
+                    p2.setCustomerGender(p.getGender());
+                    amount = p2.calcAmount();
+                    cout << ">> 요금은 " << amount << "[원] 입니다." << endl;
+                    balance = banker.getAccountSum(p); // 현재 계좌잔액으로 비교해서
+                    if (balance < amount){
+                        cout << "잔액부족으로 미용실 출입이 제한됩니다" << endl;
+                        break;
+                    }
+                    cout << ">> " << p2.getName() << " 디자이너가 미용을 완료했습니다" << endl;
+                    cout << "\n>> 결제가 진행됩니다" << endl;
+                    banker.sendMoney(p, p2, amount);
+                    cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
                     break;
                 }
             }else{
@@ -219,4 +242,41 @@ int funcPage(){
         }
     }
     return choice;
+}
+
+void fileRead(EmployManage& mngr, ifstream& fin){
+    string line;
+	vector<string> v;
+    
+	while(getline(fin, line)){		
+        v = parseLine(line);
+        if (v.size() == 3){ // 일반
+            mngr.addEmployee(Person(v[0], stoi(v[1]), v[2][0]));
+        }else if (v.size() == 4){ // 미용사 
+            mngr.addEmployee(SalonDesigner(v[0], stoi(v[1]), v[2][0], v[3]));
+        }else{ // 택시
+            mngr.addEmployee(TaxiDriver(v[0], stoi(v[1]), v[2][0], v[3], v[4]));
+        }
+	}
+}
+
+vector<string> parseLine(string line){
+	int idx = -1;
+	int start = 0;
+	int n;
+	vector<string> v;
+	while(true){
+		idx = line.find(",", start);
+		if (idx == -1){
+			// 없음
+			v.push_back(line.substr(start));
+			break;
+		}else{
+			// 있음
+			n = idx - start;
+			v.push_back(line.substr(start, n));
+			start = idx+1;
+		}
+	}
+	return v;
 }

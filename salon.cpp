@@ -31,7 +31,11 @@ int SalonDesigner::calcAmount()
     cin >> choice;
 
     if (choice == "컷")
-        return (gender == 'M') ? 10000 : 20000;
+        return (customerGender == 'M') ? 10000 : 20000;
     else
-        return (gender == 'M') ? 50000 : 100000;
+        return (customerGender == 'M') ? 50000 : 100000;
+}
+
+void SalonDesigner::setCustomerGender(char c){
+    customerGender = c;
 }

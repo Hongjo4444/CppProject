@@ -10,7 +10,7 @@ protected:
     string job;
 public:
     Person();
-    Person (string name, int id, char gender, string job);
+    Person (string name, int id, char gender, string job="");
     virtual ~Person() { }
     // taxi랑 salon이 person으로 오면서 필요없어진것같음
     // bool useTaxi(string name);
@@ -23,4 +23,5 @@ public:
     string getJob();
     // bool del(); 이것도 필요없어보임
     string getType();
+    virtual void setCustomerGender(char c) {};
 };
