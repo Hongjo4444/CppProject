@@ -23,7 +23,7 @@ int main(){
     Bank banker;
     EmployManage mngr;
     Person p, p2;
-    string name, job, type;
+    string name, job, type, accType;
     int id, amount, choice, balance, driverId;
     char gender;
     vector<Person>::iterator it;
@@ -55,6 +55,9 @@ int main(){
                 cout << "login 성공: " << p.getName() << endl;
                 switch(funcPage()){
                 case 1: // 계좌 생성
+                    cout << "계좌 유형 선택하세요 [일반/카카오] >>";
+                    cin >> accType;
+                    banker.addAccount(p, accType);
                 case 2: // 계좌 송금
                     if (getPerson(mngr, p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
                     balance = banker.showAccount(p);
