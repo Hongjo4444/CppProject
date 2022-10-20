@@ -71,21 +71,21 @@ int main(){
                     cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.showAccount(p) << "원" << endl;
                     break;
                 case 3: // 택시 이용
-                    cout << "이용할 택시 종류 선택 [우등/일반] >>";
-                    cin >> type;
-                    fee = calcAmount(); // 거리입력해서 요금 먼저 확인함
-                    balance = banker.showAccount(p); // 현재 계좌잔액으로 비교해서
-                    if (balance < fee){
-                        cout << "잔액부족으로 승차가 거부되었습니다" << endl;
-                        break;
-                    }
+                    // cout << "이용할 택시 종류 선택 [우등/일반] >>";
+                    // cin >> type;
+                    // fee = calcAmount(); // 거리입력해서 요금 먼저 확인함
+                    // balance = banker.showAccount(p); // 현재 계좌잔액으로 비교해서
+                    // if (balance < fee){
+                    //     cout << "잔액부족으로 승차가 거부되었습니다" << endl;
+                    //     break;
+                    // }
                         
 
 
-                    driverId = mngr.selectDriver(type);
-                    p2 = *(mngr.getPerson(driverId));
+                    // driverId = mngr.selectDriver(type);
+                    // p2 = *(mngr.getPerson(driverId));
                     
-                    calcAmount()
+                    // calcAmount()
                     break;
                 case 4: // 미용실 이용
                     break;
@@ -135,7 +135,7 @@ bool createAccountPage(string& name, int& id, char& gender, string& job){
         cin >> name;
         ///////
         cout << "2) 아이디 [숫자만 입력] >>";
-        keyin(id, "ID는 숫자로만 기입 바랍니다.")
+        keyin(id, "ID는 숫자로만 기입 바랍니다.");
         ///////
         cout << "3) 성별 [M/F] >>";
         cin >> tmp;
