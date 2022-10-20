@@ -1,15 +1,17 @@
 #include <iostream>
+#include <string>
 #include <map>
 #include <vector>
 using namespace std;
 
 class Bank{
-    map<Person,vector<Money>> accountList;
+    map<string,vector<Account>> accountList;
 public:
     Bank();
     ~Bank();
-    bool addAccount(Person p,Money m);
-    bool delAccount(Person p,Money m);
+    bool makeAccount(Person p,Account a,Account& newA);
+    void addAccount(Person p,Account a);
+    void delAccount(Person p,Account a);
     void showAllAccount();
     bool sendMoney(Person pf,Person pt,int m);
     bool recvMoney(Person pt,int m)
