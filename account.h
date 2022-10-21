@@ -10,15 +10,17 @@ protected:
 public:
     Account(){}
     Account(int account,int balance){
-        this->account=account;
-        this->balance=balance;
+        this->account=account; //계좌번호
+        this->balance=balance; //잔액
     };
-    virtual int getAccount(){ return account; }
-    virtual int getBalance(){ return balance; }
+    virtual ~Account(){}
+    int getAccount(){ return account; }
+    int getBalance(){ return balance; }
     virtual int getPoint(){ return 0; }
-    string isAccount(){ return "일반 계좌"; }
-    virtual void setAccount(int account){ this->account=account; }
-    virtual void setBalance(int balance){ this->balance=balance; }
+    virtual string isAccount(){ return "일반 계좌"; }
+    void setAccount(int account){ this->account=account; }
+    void setBalance(int balance){ this->balance=balance; }
+    virtual void setPoint(int point){ }
 };
 
 class KakaoAccount:public Account{
@@ -27,11 +29,8 @@ public:
     KakaoAccount(int account,int balance):Account(account,balance){
         this->point=10000;
     };
-    virtual int getAccount(){ return account; }
-    virtual int getBalance(){ return balance; }
+    virtual ~KakaoAccount(){}
     virtual int getPoint(){ return point; }
-    string isAccount(){ return "카카오 계좌"; }
-    virtual void setAccount(int account){ this->account=account; }
-    virtual void setBalance(int balance){ this->balance=balance; }
+    virtual string isAccount(){ return "카카오 계좌"; }
     virtual void setPoint(int point){ this->point=point; }
 };

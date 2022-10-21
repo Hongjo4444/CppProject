@@ -12,13 +12,15 @@ bool EmployManage::checkList(string name)
     return false;
 }
 
-void EmployManage::addEmployee(Person p)
+void EmployManage::addEmployee(Person p, bool fromDB)
 {
     if (checkList(p.getName())){
-        cout << "CANNOT ADD - Duplicate name: " << p.getName() << endl;
+        cout << ">> 이미 존재하는 이름입니다." << endl;
         return;
     }
     employee_list.push_back(p);
+    if (!fromDB)
+        cout << ">> 추가 되었습니다." << endl;
 }
 
 void EmployManage::delEmployee(Person p)
@@ -37,7 +39,7 @@ void EmployManage::delEmployee(Person p)
 void EmployManage::showList()
 {
     for(auto p: employee_list){
-        cout << p.getName() << '\t' << p.getGender() << '\t' << p.getJob() << endl;
+        cout << p.getId() << '\t' << p.getName() << '\t' << p.getGender() << '\t' << p.getJob() << endl;
     }
 }
 
