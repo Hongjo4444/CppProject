@@ -9,9 +9,9 @@ protected:
     int account,balance;
 public:
     Account(){}
-    Account(int account,int balance){
+    Account(int account){
         this->account=account; //계좌번호
-        this->balance=balance; //잔액
+        this->balance=0; //잔액
     };
     virtual ~Account(){}
     int getAccount(){ return account; }
@@ -26,7 +26,7 @@ public:
 class KakaoAccount:public Account{
     int point;
 public:
-    KakaoAccount(int account,int balance):Account(account,balance){
+    KakaoAccount(int account):Account(account){
         this->point=10000;
     };
     virtual ~KakaoAccount(){}
