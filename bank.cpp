@@ -124,6 +124,9 @@ void Bank::addAccount(Person p){
         vA.push_back(newA);
         accountList.insert(pair<string,vector<Account>>(p.getName(), vA));
         cout << "계좌 만들기 성공" << endl;
+        cout << "BEFORE: " << p.getAccStat() << endl;
+        p.convertAccStat();
+        cout << "AFTER: " << p.getAccStat() << endl;
         return;
     }
     else{
@@ -139,6 +142,9 @@ void Bank::addAccount(Person p){
             vA.push_back(newA);
             accountList.insert(pair<string,vector<Account>>(p.getName(), vA));
             cout << "계좌 만들기 성공" << endl;
+            cout << "BEFORE: " << p.getAccStat() << endl;
+            p.convertAccStat();
+            cout << "AFTER: " << p.getAccStat() << endl;
             return;
         }
         else{ //makeAccount 실패한 경우
@@ -320,7 +326,7 @@ bool Bank::sendMoney(Person pf,Person pt,int m){
     else{
         cout << "받는 이의 은행을 선택 바랍니다 [일반/카카오] >>";
         cin >> toAcc;
-        accIdx = toAcc == "카카오" ? 0 : 1; // vector<Account> [0]카카오, [1]일반
+        accIdx = toAcc == "일반" ? 0 : 1; // vector<Account> [0]일반, [1]카카오
     }
     (itt->second)[accIdx].setBalance((itt->second)[accIdx].getBalance() + m);
     
@@ -336,19 +342,19 @@ bool Bank::sendMoney(Person pf,Person pt,int m){
         else{
             if((itf->second).size()==1)
             {   // (1) 계좌 1개만 있는경우
-                subtract((itf->second)[0], m);
+                reductionAmount = subtract((itf->second)[0], m);
                 cout << "*** " << (itf->second)[0].isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
             }
             else 
             {   // (2) 계좌 2개 있는경우
                 cout << "송금을 진행할 계좌를 선택 바랍니다 [일반/카카오] >>";
                 cin >> toAcc;
-                accIdx = toAcc == "카카오" ? 0 : 1; // vector<Account> [0]카카오, [1]일반
-                subtract((itf->second)[accIdx], m);
+                accIdx = toAcc == "일반" ? 0 : 1; // vector<Account> [0]일반, [1]카카오
+                reductionAmount = subtract((itf->second)[accIdx], m);
                 cout << "*** " << (itf->second)[accIdx].isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
                 if (m > 0){
                     accIdx = accIdx == 1 ? 0 : 1;
-                    subtract((itf->second)[accIdx], m);
+                    reductionAmount = subtract((itf->second)[accIdx], m);
                     cout << "*** " << (itf->second)[accIdx].isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
                 }
             }
@@ -395,6 +401,7 @@ int subtract(Account& a, int &m, bool isPoint){
     /// @return a계좌에서 차감되는 금액 반환
 
     int diff, reductionAmount;
+    diff = reductionAmount = 0;
     
     if (isPoint){
         diff = m - a.getPoint(); //diff >= 0 : 내야할 돈이 더 많은 경우 / 잔액이 충분한 경우
