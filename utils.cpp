@@ -96,6 +96,7 @@ int funcPage(){
         cout << "5. 계좌 삭제" << endl;
         cout << "6. 계좌 로그아웃" << endl;
         cout << setw(w) << setfill('-') << '-' << endl;
+        cout << "원하는 기능을 선택해주세요 >>";
         if (keyin(choice, "ID는 숫자로만 기입 바랍니다.")){
             if (1 <= choice && choice <= 6)
                 break;
