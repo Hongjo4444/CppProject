@@ -114,7 +114,7 @@ bool Bank::makeAccount(Person p, Account** newA){
     return false;
 }
 
-void Bank::addAccount(Person p){
+void Bank::addAccount(Person& p){
     Account* newA;
     auto it=accountList.find(p.getName());
     if(accountList.size()==0){
