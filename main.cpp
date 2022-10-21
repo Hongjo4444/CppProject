@@ -23,7 +23,7 @@ int main(){
     choice = -1;
     int i = 0;
     srand((unsigned)time(NULL));
-    map<string,vector<Account>>::iterator itForDel;
+    map<string,vector<Account*>>::iterator itForDel;
     int ptAcc;
 
     ifstream fin("data.txt");
@@ -127,15 +127,15 @@ int main(){
                         cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 case 5: // 계좌 삭제
-                    itForDel==banker.getIterbyName(p.getName());
+                    itForDel=banker.getIterbyName(p.getName());
                     banker.showAccount(itForDel);
                     break;
                 case 6: // 로그아웃
                     cout << "종료합니다." << endl;
                     exit(1);
                     break;
-                case 7: // 로그아웃
-                    cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>" << endl;
+                case 7: // 현금 입금
+                    cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>" << endl; //3번 선택할때 예외 필요!!!!!!!!!!!!!!!!!!!!!!!!
                     cin >> ptAcc;
                     cout << "입금할 금액을 입력하세요 >>" << endl;
                     cin >> amount;
