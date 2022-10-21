@@ -18,6 +18,7 @@ public:
     void delAccount(Person p);
     void showAllAccount();
     void showAccount(map<string,vector<Account>>::iterator it);
+    //map<string,vector<Account>>::iterator getIterbyName(string name){ }////////////person 받아서 하는걸로
     int getAccountSum(Person p);
     int getBalanceSum(Person p);
     bool sendMoney(Person pf,Person pt,int m);

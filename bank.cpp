@@ -7,7 +7,25 @@ Bank::~Bank(){ }
 bool Bank::makeAccount(Person p, Account& newA){
     int choose;
     int account,balance;
-
+    if(accountList.size()==0){
+        cout << "일반 계좌, 카카오 계좌 모두 가입 가능합니다.(1:일반 계좌 가입,2:카카오 계좌 가입)" << endl;
+        cin >> choose;
+        cout << "계좌 번호와 초기 입금액 입력 >> " << endl;
+        while(1){
+            cin >> account >> balance;
+            if(choose==1){                
+                newA = Account(account,balance);
+                return true;
+            }
+            else if(choose==2){
+                newA = KakaoAccount(account,balance);
+                return true;
+            }
+            else{
+                cout << "1,2 중에 선택하세요." << endl;
+            }
+        }
+    }
     for(auto it=accountList.begin();it!=accountList.end(); it++){ //계좌 체크하고 만들 수 있으면 만들어서 받아온 newA에 넣기
         if((p.getName()==it->first) && (it->second).size()==2){
             cout << "이미 일반 계좌,카카오 계좌가 모두 있습니다." << endl;
@@ -56,11 +74,11 @@ bool Bank::makeAccount(Person p, Account& newA){
             while(1){
                 cin >> account >> balance;
                 if(choose==1){                
-                    newA = KakaoAccount(account,balance);
+                    newA = Account(account,balance);
                     return true;
                 }
                 else if(choose==2){
-                    newA = Account(account,balance);
+                    newA = KakaoAccount(account,balance);
                     return true;
                 }
                 else{
@@ -75,23 +93,34 @@ bool Bank::makeAccount(Person p, Account& newA){
 
 void Bank::addAccount(Person p){
     Account newA;
-    cout << newA.getAccount() << ", " << newA.getBalance() << endl;
+    // cout << newA.getAccount() << ", " << newA.getBalance() << endl; -------------------------------------------------------삭제
     auto it=accountList.find(p.getName());
-    if(makeAccount(p,newA) && it!=accountList.end()){ //원래 계좌가 있던경우 -> 있던 벡터에 추가or있던벡터 리뉴얼
-        if((it->second)[0].isAccount()=="일반 계좌") (it->second).push_back(newA);
-        else if((it->second)[0].isAccount()=="카카오 계좌") (it->second).insert((it->second).begin(),newA);
-        return;
-    }
-    else if(makeAccount(p,newA) && it==accountList.end()){ //원래 계좌가 없던경우 -> 벡터 만들어서 맵에 추가
+    if(accountList.size()==0){
+        makeAccount(p,newA); //처음 켰을때(리스트 빈 경우)
         vector<Account> vA;
         vA.push_back(newA);
         accountList.insert(pair<string,vector<Account>>(p.getName(), vA));
         cout << "계좌 만들기 성공" << endl;
         return;
     }
-    else{ //makeAccount 실패한 경우
-        cout << "계좌 만들기 실패" << endl;
-        return;
+    else{
+        bool check=makeAccount(p,newA);
+        if(check==true && it!=accountList.end()){ //원래 계좌가 있던경우 -> 있던 벡터에 추가or있던벡터 리뉴얼
+            if((it->second)[0].isAccount()=="일반 계좌") (it->second).push_back(newA);
+            else if((it->second)[0].isAccount()=="카카오 계좌") (it->second).insert((it->second).begin(),newA); //////완료문구
+            return;
+        }
+        else if(check==true && it==accountList.end()){ //원래 계좌가 없던경우 -> 벡터 만들어서 맵에 추가
+            vector<Account> vA;
+            vA.push_back(newA);
+            accountList.insert(pair<string,vector<Account>>(p.getName(), vA));
+            cout << "계좌 만들기 성공" << endl;
+            return;
+        }
+        else{ //makeAccount 실패한 경우
+            cout << "계좌 만들기 실패" << endl;
+            return;
+        }
     }
 }
 
@@ -166,16 +195,16 @@ void Bank::showAllAccount(){
 
 void Bank::showAccount(map<string,vector<Account>>::iterator it){
     if((it->second).size()==2){
-        cout << "이름: " << it->first
-        << "일반 계좌,잔액: " << (it->second)[0].getAccount() << (it->second)[0].getBalance()
-        << "카카오 계좌,잔액: " << (it->second)[1].getAccount() << (it->second)[1].getBalance() << endl;
+        cout << "이름: " << it->first << ", " 
+        << "일반 계좌,잔액: " << (it->second)[0].getAccount() << ", " << (it->second)[0].getBalance()
+        << "카카오 계좌,잔액: " << (it->second)[1].getAccount() << ", " << (it->second)[1].getBalance() << endl;
     }
     else{
         if((it->second)[0].isAccount()=="일반 계좌"){
-            cout << "이름: " << it->first << "일반 계좌,잔액: " << (it->second)[0].getAccount() << (it->second)[0].getBalance() << endl;
+            cout << "이름: " << it->first << ", " << "일반 계좌,잔액: " << (it->second)[0].getAccount() << ", " << (it->second)[0].getBalance() << endl;
         }
         else{
-            cout << "이름: " << it->first << "카카오 계좌,잔액: " << (it->second)[0].getAccount() << (it->second)[0].getBalance() << endl;
+            cout << "이름: " << it->first << ", " << "카카오 계좌,잔액: " << (it->second)[0].getAccount() << ", " << (it->second)[0].getBalance() << endl;
         }
     }
 }
