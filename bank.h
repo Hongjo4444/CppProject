@@ -27,5 +27,5 @@ public:
     int getAccountSum(Person p);
     int getBalanceSum(Person p);
     bool sendMoney(Person pf,Person pt,int m);
-    bool recvMoney(Person pt,int m);
+    bool recvMoney(Person pt,int ptAcc, int m);
 };
