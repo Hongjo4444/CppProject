@@ -8,7 +8,7 @@ class EmployManage{
     vector<Person> employee_list;
 public:
     bool checkList(string name);
-    void addEmployee(Person p);
+    void addEmployee(Person p, bool fromDB=false);
     void delEmployee(Person p);
     void showList();
     //int calcAmount();  필요없는 듯
