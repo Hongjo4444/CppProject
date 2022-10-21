@@ -23,6 +23,7 @@ int main(){
     choice = -1;
     int i = 0;
     srand((unsigned)time(NULL));
+    map<string,vector<Account>>::iterator itForDel;
 
     ifstream fin("data.txt");
     if (!fin){
@@ -118,6 +119,14 @@ int main(){
                     banker.sendMoney(p, p2, amount);
                     cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
                     break;
+                case 5: // 계좌 삭제
+                    itForDel==banker.getIterbyName(p.getName());
+                    banker.showAccount(itForDel);
+                    break;
+                case 6: // 로그아웃
+                    cout << "종료합니다." << endl;
+                    exit(1);
+                    break;
                 }
             }else{
                 cout << "login 실패" << endl;
@@ -127,6 +136,9 @@ int main(){
             cout << "종료합니다." << endl;
             exit(1);
             break;
+        case 4:
+            banker.showAllAccount();
+            break;            
         }
     }
     
