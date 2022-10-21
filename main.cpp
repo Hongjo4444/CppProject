@@ -64,15 +64,17 @@ int main(){
                     while (true){
                         keyin(amount, "이체 금액은 숫자로 입력 바랍니다");
                         if (amount > balance)
-                            cout << "잔액보다 큰 금액이 입력되었습니다. " << balance << "원 이하로 입력바랍니다" << endl;
+                            cout << "잔액 (" << balance << "원) 이하로 입력 바랍니다 >>";
                         else if (amount < 0)
-                            cout << "0보다 큰 금액 입력바랍니다." << endl;
+                            cout << "0보다 큰 금액 입력바랍니다 >>";
                         else
                             break;
                     }
-                    banker.sendMoney(p, p2, amount);
-                    cout << ">> " << p.getName() <<"님 계좌에서 " << p2.getName() << "님 계좌로 " << amount << "원 이체가 완료되었습니다." << endl;
-                    cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                    if (banker.sendMoney(p, p2, amount)){
+                        cout << ">> " << p.getName() <<"님 계좌에서 " << p2.getName() << "님 계좌로 " << amount << "원 이체가 완료되었습니다." << endl;
+                        // cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                    }else
+                        cout << ">> 이체를 실패했습니다." << endl;
                     break;
                 case 3: // 택시 이용
                     cout << "이용할 택시 종류 선택 [우등/일반] >>";
@@ -99,8 +101,10 @@ int main(){
                         i++;
                     }
                     cout << "\n>> 결제가 진행됩니다" << endl;
-                    banker.sendMoney(p, p2, amount);
-                    cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                    if (banker.sendMoney(p, p2, amount))
+                        cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                    else
+                        cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 case 4: // 미용실 이용
                     designerId = mngr.selectPerson();
@@ -115,8 +119,10 @@ int main(){
                     }
                     cout << ">> " << p2.getName() << " 디자이너가 미용을 완료했습니다" << endl;
                     cout << "\n>> 결제가 진행됩니다" << endl;
-                    banker.sendMoney(p, p2, amount);
-                    cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                    if (banker.sendMoney(p, p2, amount))
+                        cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                    else
+                        cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 }
             }else{

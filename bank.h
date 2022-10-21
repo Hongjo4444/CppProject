@@ -8,6 +8,8 @@
 #include "person.h"
 using namespace std;
 
+int subtract(Account& a, int &m, bool isPoint=false);
+
 class Bank{
     map<string,vector<Account>> accountList;
 public:

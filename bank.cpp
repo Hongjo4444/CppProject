@@ -1,5 +1,7 @@
 #include "bank.h"
 
+
+
 Bank::Bank(){ }
 
 Bank::~Bank(){ }
@@ -212,6 +214,7 @@ void Bank::showAccount(map<string,vector<Account>>::iterator it){
 int Bank::getAccountSum(Person p){
     int sum=0;
     auto it=accountList.find(p.getName());
+    
     if((it->second).size()==2){
         sum=(it->second)[0].getBalance()+(it->second)[1].getBalance()+(it->second)[1].getPoint();
     }
@@ -237,44 +240,75 @@ int Bank::getBalanceSum(Person p){
 }
 
 bool Bank::sendMoney(Person pf,Person pt,int m){
+    /// @brief 송금 및 결제 용 함수
+    ///         main()에서 송신인 전체 잔액이 내야할 금액보다 크거나 같은거 확인 후 들어와서 해당 사항 체크 안해줌
+    /// @param pf : 보내는 사람 Person
+    /// @param pt : 받는 사람 Person
+    /// @param m : 송금(결제) 금액
+    /// @return : 송신/수신인 계좌가 없는 경우 false 반환 // 송금 성공 시 true 반환
+    string toAcc;
+    int reductionAmount, accIdx;
+
     auto itf=accountList.find(pf.getName()); //pf 돈 m만큼 감소, 감소 성공하면 pt 돈 m만큼 증가
     auto itt=accountList.find(pt.getName());
-    showAccount(itt); //내 계좌상황 보여주기
+
     if(itf==accountList.end()){
-        cout << "보내는 사람이 없는 사람입니다" << endl;
+        cout << ">> 송신인 " << pf.getName() << "님은 현재 계좌가 없습니다." << endl;
         return false;
     }
     if(itt==accountList.end()){
-        cout << "받는 사람이 없는 사람입니다" << endl;
+        cout << ">> 수신인 " << pt.getName() << "님은 현재 계좌가 없습니다." << endl;
         return false;
     }
-    return true;
 
-
-    // if(accountList.getAccountSum(pf)<m){ // 포인트까지 고려
-    //     cout << "잔액 부족" << endl;
-    //     return false;
-    // }
-    // else{///////////////////////////////어느은행으로 보낼지?
-    //     string toAcc;
-    //     cout << "어느 은행으로 보내시겠습니까?(카카오 계좌 선차감)";
-    //     cin >> toAcc;
-    //     int left;
-    //     while(left<=0){
-
-    //     }
-    //     if((itt->second).size()==2){
-    //         //
-    //     }
-    //     else{
-
-    //     }
-
-    //     (itf->second)[0].setBalance((itf->second)[0].getBalance()-m); //보내는사람 차감
-    //     (itt->second)[1].setBalance((itt->second)[1].getBalance()+m); //받는사람 추가
-    //     cout << "송금 성공" << endl;
-    //     return true;
-    // }
+    //// 1. 수신인 계좌 일단 채워주기
+    if((itt->second).size() == 1)
+        accIdx = 0;
+    else{
+        cout << "받는 이의 은행을 선택 바랍니다 [일반/카카오] >>";
+        cin >> toAcc;
+        accIdx = toAcc == "카카오" ? 0 : 1; // vector<Account> [0]카카오, [1]일반
+    }
+    (itt->second)[accIdx].setBalance((itt->second)[accIdx].getBalance() + m);
+    
+    
+    //// 2. 송신인(나) 계좌에서 차감
+    while (m > 0){
+        // 1) 포인트 있는 경우
+        if ((itf->second)[0].getPoint() > 0){
+            reductionAmount = subtract((itf->second)[0], m, true);
+            cout << "*** 포인트가 존재해서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
+        }
+        // 2) 포인트 없는 경우
+        else{
+            if((itf->second).size()==1)
+            {   // (1) 계좌 1개만 있는경우
+                subtract((itf->second)[0], m);
+                cout << "*** " << (itf->second)[0].isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
+            }
+            else 
+            {   // (2) 계좌 2개 있는경우
+                cout << "송금을 진행할 계좌를 선택 바랍니다 [일반/카카오] >>";
+                cin >> toAcc;
+                accIdx = toAcc == "카카오" ? 0 : 1; // vector<Account> [0]카카오, [1]일반
+                subtract((itf->second)[accIdx], m);
+                cout << "*** " << (itf->second)[accIdx].isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
+                if (m > 0){
+                    accIdx = accIdx == 1 ? 0 : 1;
+                    subtract((itf->second)[accIdx], m);
+                    cout << "*** " << (itf->second)[accIdx].isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
+                }
+            }
+        }
+    }
+    cout << endl;
+    cout << ">>> 송금 완료 후 나의 계좌 상황" << endl;
+    showAccount(itf);
+    cout << endl;
+    cout << "*** 수신인 " << pt.getName() << "님의 " << (itf->second)[0].isAccount() << "로 송금 되었습니다." << endl;
+    cout << ">>> 송금 완료 후 수신인의 계좌 상황" << endl;
+    showAccount(itt);
+    cout << endl;
     return true;
 }
 
@@ -287,4 +321,30 @@ bool Bank::recvMoney(Person pt,int m){
     (itt->second)[0].setBalance((itt->second)[0].getBalance()+m);
     cout << "지급 성공" << endl;
     return true;
+}
+
+
+
+int subtract(Account& a, int &m, bool isPoint){
+    /// @brief 내야 할 돈이 m원일 때 a 계좌에서 빠지는경우
+    /// @param a a계좌에서 빠져나감
+    /// @param m  m만큼 빠져나감
+    /// @param isPoint 포인트인지 현금인지 여부
+    /// @return a계좌에서 차감되는 금액 반환
+
+    int diff, reductionAmount;
+    
+    if (isPoint){
+        diff = m - a.getPoint(); //diff >= 0 : 내야할 돈이 더 많은 경우 / 잔액이 충분한 경우
+        reductionAmount = diff >= 0 ? a.getPoint() : m; //내잔액에서 차감되는 금액은 모두전체
+        m = diff >= 0 ? diff : 0; //내야할돈은 해결안됐어 / 내야할돈 해결됨
+        a.setPoint(diff >= 0 ? 0 : -diff); //내잔액은 모두 소진
+    }else{
+        diff = m - a.getBalance();
+        reductionAmount = diff >= 0 ? a.getBalance() : m;
+        m = diff >= 0 ? diff : 0;
+        a.setBalance(diff >= 0 ? 0 : -diff);
+    }
+    
+    return reductionAmount; 
 }
