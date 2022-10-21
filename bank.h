@@ -4,6 +4,8 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <iomanip>
+#include <cstdlib>
 #include "account.h"
 #include "person.h"
 using namespace std;
@@ -15,12 +17,13 @@ class Bank{
 public:
     Bank();
     ~Bank();
+    bool checkAccDup(int a);
     bool makeAccount(Person p, Account& newA);
     void addAccount(Person p);
     void delAccount(Person p);
     void showAllAccount();
     void showAccount(map<string,vector<Account>>::iterator it);
-    //map<string,vector<Account>>::iterator getIterbyName(string name){ }////////////person 받아서 하는걸로
+    map<string,vector<Account>>::iterator getIterbyName(string name);////////////person 받아서 하는걸로
     int getAccountSum(Person p);
     int getBalanceSum(Person p);
     bool sendMoney(Person pf,Person pt,int m);
