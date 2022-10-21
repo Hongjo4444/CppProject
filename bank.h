@@ -20,7 +20,7 @@ public:
     bool checkAccDup(int a);
     bool makeAccount(Person p, Account** newA);
     void addAccount(Person& p);
-    void delAccount(Person p);
+    void delAccount(Person& p);
     void showAllAccount();
     void showAccount(map<string,vector<Account*>>::iterator it);
     map<string,vector<Account*>>::iterator getIterbyName(string name);////////////person 받아서 하는걸로

@@ -37,16 +37,14 @@ bool Bank::makeAccount(Person p, Account** newA){
         if(checkAccDup(account)) break;
     }
     if(accountList.size()==0){
-        cout << "일반 계좌, 카카오 계좌 모두 가입 가능합니다.(1:일반 계좌 가입,2:카카오 계좌 가입)" << endl;
+        std::cout << "일반 계좌, 카카오 계좌 모두 가입 가능합니다.(1:일반 계좌 가입,2:카카오 계좌 가입)" << endl;
         cin >> choose;
         while(1){
             if(choose==1){
-                Account *a=new Account(account);                
-                *newA = a;
+                *newA = new Account(account);
                 return true;
             }
             else if(choose==2){
-                cout << "11111111111" << endl;
                 *newA = new KakaoAccount(account);
                 return true;
             }
@@ -120,7 +118,7 @@ void Bank::addAccount(Person& p){
     if(accountList.size()==0){
         makeAccount(p, &newA); //처음 켰을때(리스트 빈 경우)
         vector<Account*> vA;
-        vA.push_back(newA);
+        vA.push_back(newA); ///////////////////////////////////////////////////////////////////////////////////////
         accountList.insert(pair<string,vector<Account*>>(p.getName(), vA));
         cout << "계좌 만들기 성공" << endl;
         cout << "BEFORE: " << p.getAccStat() << endl;
@@ -138,7 +136,7 @@ void Bank::addAccount(Person& p){
         }
         else if(check==true && it==accountList.end()){ //원래 계좌가 없던경우 -> 벡터 만들어서 맵에 추가
             vector<Account*> vA;
-            vA.push_back(newA);
+            vA.push_back(newA);////////////////////////////////////////////////////////////////////
             accountList.insert(pair<string,vector<Account*>>(p.getName(), vA));
             cout << "계좌 만들기 성공" << endl;
             cout << "BEFORE: " << p.getAccStat() << endl;
@@ -153,13 +151,16 @@ void Bank::addAccount(Person& p){
     }
 }
 
-void Bank::delAccount(Person p){
-    string delName = p.getName();
-    auto it=accountList.find(delName);
-    if(it!=accountList.end()){
-        cout << "삭제할 계좌 선택(1:일반 계좌,2:카카오 계좌,3:전체 삭제)" << endl;
+void Bank::delAccount(Person& p){
+    auto it=accountList.find(p.getName());
+    if(it==accountList.end()) {
+        cout << "계좌가 없습니다" << endl;
+        return;
+    }
+    else if(it!=accountList.end()){
         int choose;
         while(1){
+            cout << "삭제할 계좌 선택(1:일반 계좌,2:카카오 계좌,3:전체 삭제,4:취소)" << endl;
             cin >> choose;
             switch(choose){
                 case 1:
@@ -173,6 +174,8 @@ void Bank::delAccount(Person p){
                     }
                     else{
                         (it->second).erase((it->second).begin());
+                        if((it->second).size()==0) accountList.erase(it);
+                        cout << "일반 계좌 삭제 완료" << endl;
                         break;
                     }
                 case 2:
@@ -180,13 +183,14 @@ void Bank::delAccount(Person p){
                         cout << "삭제할 계좌가 없습니다." << endl;
                         break;
                     }
-                    else if((it->second).size()==1 && (it->second)[0]->
-                    isAccount()=="일반 계좌"){
+                    else if((it->second).size()==1 && (it->second)[0]->isAccount()=="일반 계좌"){
                         cout << "카카오 계좌가 없습니다.(일반 계좌만 보유 중)" << endl;
                         break;
                     }
                     else{
-                        (it->second).erase((it->second).end());
+                        (it->second).erase((it->second).end()-1);
+                        if((it->second).size()==0) accountList.erase(it);
+                        cout << "카카오 계좌 삭제 완료" << endl;
                         break;
                     }
                 case 3:
@@ -203,18 +207,16 @@ void Bank::delAccount(Person p){
                         break;
                     }
                     else{
-                        accountList.erase(delName);
+                        accountList.erase(p.getName());
+                        if((it->second).size()==0) accountList.erase(it);
                         cout << "계좌 2개 삭제 완료" << endl;
+                        break;
                     }
-                    break;
-                default:
-                    cout << "1,2,3 중에 선택하세요" << endl;
-                    break;
+                case 4:
+                    return;
             }   
         }
     }
-    else cout << "계좌가 없습니다" << endl;
-    if((it->second).size()==0) accountList.erase(it);
     return;
 }
 
@@ -236,8 +238,8 @@ void Bank::showAccount(map<string,vector<Account*>>::iterator it){
         cout << left << setw(w) << setfill(' ') << (it->second)[0]->getBalance() << endl;
         cout << left << setw(25) << setfill(' ') << "카카오 계좌";
         cout << left << setw(22) << setfill(' ') << (it->second)[1]->getAccount();
-        cout << left << setw(w) << setfill(' ') << (it->second)[1]->getBalance();
-        cout << left << setw(w) << setfill(' ') << (it->second)[1]->getPoint() << endl;
+        cout << left << setw(18) << setfill(' ') << (it->second)[1]->getBalance();
+        cout << left << setw(18) << setfill(' ') << (it->second)[1]->getPoint() << endl;
         cout << endl;
     }
     else{
@@ -257,8 +259,8 @@ void Bank::showAccount(map<string,vector<Account*>>::iterator it){
             cout << left << setw(18) << setfill(' ') << "포인트" << endl;
             cout << left << setw(25) << setfill(' ') << "카카오 계좌";
             cout << left << setw(22) << setfill(' ') << (it->second)[0]->getAccount();
-            cout << left << setw(w) << setfill(' ') << (it->second)[0]->getBalance();
-            cout << left << setw(w) << setfill(' ') << (it->second)[0]->getPoint() << endl;
+            cout << left << setw(18) << setfill(' ') << (it->second)[0]->getBalance();
+            cout << left << setw(18) << setfill(' ') << (it->second)[0]->getPoint() << endl;
             cout << endl;
         }
     }
