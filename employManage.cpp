@@ -69,12 +69,12 @@ int EmployManage::selectPerson(string type)
 
     if (type == ""){
         for(Person p: employee_list){
-            if (p.getJob() == "미용사")
+            if (p.getJob() == "미용사" && p.getAccStat())
                 candidates.push_back(p.getId());
         }
     }else{
         for(Person p: employee_list){
-            if (p.getJob() == "택시운전사"){
+            if (p.getJob() == "택시운전사" && p.getAccStat()){
                 if (p.getType() == type){
                     candidates.push_back(p.getId());
                 }
@@ -82,7 +82,10 @@ int EmployManage::selectPerson(string type)
         }
     }
     
-
-    n = rand() % candidates.size();
-    return candidates[n];
+    if (candidates.size() == 0)
+        return -1;
+    else{
+        n = rand() % candidates.size();
+        return candidates[n];
+    }
 }

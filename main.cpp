@@ -81,7 +81,10 @@ int main(){
                 case 3: // 택시 이용
                     cout << "이용할 택시 종류 선택 [우등/일반] >>";
                     cin >> type;
-                    driverId = mngr.selectPerson(type);
+                    if ((driverId = mngr.selectPerson(type)) == -1){
+                        cout << "현재 이용가능한 택시가 없습니다" << endl;
+                        break;
+                    }
                     p2 = *(mngr.getPerson(driverId));
                     amount = p2.calcAmount(); // 거리입력해서 요금 먼저 확인함
                     cout << ">> 요금은 " << amount << "[원] 입니다." << endl;
@@ -109,7 +112,10 @@ int main(){
                         cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 case 4: // 미용실 이용
-                    designerId = mngr.selectPerson();
+                    if ((designerId = mngr.selectPerson()) == -1){
+                        cout << "현재 이용가능한 미용실 없습니다" << endl;
+                        break;
+                    }
                     p2 = *(mngr.getPerson(designerId));
                     p2.setCustomerGender(p.getGender());
                     amount = p2.calcAmount();
@@ -135,9 +141,9 @@ int main(){
                     exit(1);
                     break;
                 case 7: // 현금 입금
-                    cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>" << endl; //3번 선택할때 예외 필요!!!!!!!!!!!!!!!!!!!!!!!!
+                    cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>"; 
                     cin >> ptAcc;
-                    cout << "입금할 금액을 입력하세요 >>" << endl;
+                    cout << "입금할 금액을 입력하세요 >>";
                     cin >> amount;
                     banker.recvMoney(p,ptAcc,amount);
 
