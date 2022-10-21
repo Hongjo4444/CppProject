@@ -19,7 +19,7 @@ public:
     ~Bank();
     bool checkAccDup(int a);
     bool makeAccount(Person p, Account** newA);
-    void addAccount(Person p);
+    void addAccount(Person& p);
     void delAccount(Person p);
     void showAllAccount();
     void showAccount(map<string,vector<Account*>>::iterator it);
