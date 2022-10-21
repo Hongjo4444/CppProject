@@ -47,6 +47,7 @@ bool Bank::makeAccount(Person p, Account& newA){
                 return true;
             }
             else if(choose==2){
+                cout << "11111111111" << endl;
                 newA = KakaoAccount(account);
                 return true;
             }
@@ -235,12 +236,14 @@ void Bank::showAccount(map<string,vector<Account>>::iterator it){
     }
     else{
         if((it->second)[0].isAccount()=="일반 계좌"){
+            cout << "2222222222" << endl;
             cout << "이름 : " << left << setw(11) << setfill(' ')  << it->first;
             cout << left << setw(29) << setfill(' ') << "계좌번호(8자리)";
             cout << left << setw(w) << setfill(' ') << "잔액" << endl;
             cout << left << setw(24) << setfill(' ') << "일반 계좌";
             cout << left << setw(22) << setfill(' ') << (it->second)[0].getAccount();
             cout << left << setw(w) << setfill(' ') << (it->second)[0].getBalance() << endl;
+            cout << endl;
         }
         else{
             cout << "이름 : " << left << setw(11) << setfill(' ')  << it->first;
@@ -362,12 +365,21 @@ bool Bank::sendMoney(Person pf,Person pt,int m){
     return true;
 }
 
-bool Bank::recvMoney(Person pt,int m){
+bool Bank::recvMoney(Person pt,int ptAcc, int m){
     auto itt=accountList.find(pt.getName());
     if(itt==accountList.end()){
         cout << "받는 사람이 없는 사람입니다" << endl;
         return false;
     }
+    // else{
+    //     if()
+    //     if(ptAcc==1 && p.)//1인데->받는사람 일반계좌가 없는경우
+    //     //1인데->받는사람 일반계좌가 있는 경우
+
+
+    // }
+
+
     (itt->second)[0].setBalance((itt->second)[0].getBalance()+m);
     cout << "지급 성공" << endl;
     return true;

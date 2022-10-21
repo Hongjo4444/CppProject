@@ -24,6 +24,7 @@ int main(){
     int i = 0;
     srand((unsigned)time(NULL));
     map<string,vector<Account>>::iterator itForDel;
+    int ptAcc;
 
     ifstream fin("data.txt");
     if (!fin){
@@ -133,6 +134,14 @@ int main(){
                     cout << "종료합니다." << endl;
                     exit(1);
                     break;
+                case 7: // 로그아웃
+                    cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>" << endl;
+                    cin >> ptAcc;
+                    cout << "입금할 금액을 입력하세요 >>" << endl;
+                    cin >> amount;
+                    banker.recvMoney(p,ptAcc,amount);
+
+                    break;    
                 }
             }else{
                 cout << "login 실패" << endl;
