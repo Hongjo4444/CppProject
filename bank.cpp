@@ -151,8 +151,8 @@ void Bank::addAccount(Person& p){
     }
 }
 
-void Bank::delAccount(Person& p){
-    auto it=accountList.find(p.getName());
+void Bank::delAccount(string delName){
+    auto it=accountList.find(delName);
     if(it==accountList.end()) {
         cout << "계좌가 없습니다" << endl;
         return;
@@ -207,7 +207,7 @@ void Bank::delAccount(Person& p){
                         break;
                     }
                     else{
-                        accountList.erase(p.getName());
+                        accountList.erase(delName);
                         if((it->second).size()==0) accountList.erase(it);
                         cout << "계좌 2개 삭제 완료" << endl;
                         break;
