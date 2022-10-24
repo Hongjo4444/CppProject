@@ -68,7 +68,7 @@ bool keyin(T& n, string errMsg){ // 입력타입 오류 여부 확인 함수
     }
 }
 
-bool getPerson(EmployManage& mngr, Person &p, string cmdMsg, string errMsg){ 
+bool getPerson(EmployManage& mngr, Person** p, string cmdMsg, string errMsg){ 
     int id;
     cout << setw(w) << setfill('-') << '-' << endl;
     while (true){
@@ -76,10 +76,10 @@ bool getPerson(EmployManage& mngr, Person &p, string cmdMsg, string errMsg){
         if (keyin(id, errMsg)) break;
     }
 
-    vector<Person>::iterator it = mngr.getPerson(id);
-    if (it->getName() == "")
+    vector<Person*>::iterator it = mngr.getPerson(id);
+    if ((*it)->getName() == "")
         return false;
-    p = *it;
+    *p = *it; //?
     return true;
 }
 
@@ -113,11 +113,11 @@ void fileRead(EmployManage& mngr, ifstream& fin){
 	while(getline(fin, line)){		
         v = parseLine(line);
         if (v.size() == 3){ // 일반
-            mngr.addEmployee(Person(v[0], stoi(v[1]), v[2][0]), true);
+            mngr.addEmployee(new Person(v[0], stoi(v[1]), v[2][0]), true);
         }else if (v.size() == 4){ // 미용사 
-            mngr.addEmployee(SalonDesigner(v[0], stoi(v[1]), v[2][0], v[3]), true);
+            mngr.addEmployee(new SalonDesigner(v[0], stoi(v[1]), v[2][0], v[3]), true);
         }else{ // 택시
-            mngr.addEmployee(TaxiDriver(v[0], stoi(v[1]), v[2][0], v[3], v[4]), true);
+            mngr.addEmployee(new TaxiDriver(v[0], stoi(v[1]), v[2][0], v[3], v[4]), true);
         }
 	}
 }
