@@ -95,14 +95,14 @@ int funcPage(){
     while (true){
         cout << setw(w) << setfill('-') << '-' << endl;
         cout << "1. 계좌 생성" << endl;
-        cout << "2. 계좌 이체" << endl;
-        cout << "3. 택시 부르기" << endl;
-        cout << "4. 미용실 가기" << endl;
+        cout << "2. 계좌 확인" << endl;
+        cout << "3. 계좌 이체" << endl;
+        cout << "4. 현금 입금" << endl;
         cout << "5. 계좌 삭제" << endl;
-        cout << "6. 로그아웃" << endl;
-        cout << "7. 현금 입금" << endl;
-        cout << "8. 탈퇴" << endl;
-        cout << "9. 계좌 확인" << endl;
+        cout << "6. 택시 부르기" << endl;
+        cout << "7. 미용실 가기" << endl;
+        cout << "8. 로그아웃" << endl;
+        cout << "9. 탈퇴" << endl;
         cout << setw(w) << setfill('-') << '-' << endl;
         cout << "원하는 기능을 선택해주세요 >>";
         if (keyin(choice, "ID는 숫자로만 기입 바랍니다.")){

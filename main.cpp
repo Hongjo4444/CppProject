@@ -63,7 +63,7 @@ int main(){
                         }
                         goto keeplogin;
                         break;
-                    case 2: // 계좌 송금
+                    case 3: // 계좌 송금
                         if (getPerson(mngr, &p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
                         balance = banker.getAccountSum(p->getName());
                         cout << "이체 금액 (송금 가능 금액: " << balance << "[원]) >>";
@@ -83,7 +83,7 @@ int main(){
                         }
                         goto keeplogin;
                         break;
-                    case 3: // 택시 이용
+                    case 6: // 택시 이용
                         cout << "이용할 택시 종류 선택 [우등/일반] >>";
                         cin >> type;
                         if ((driverId = mngr.selectPerson(type)) == -1){
@@ -107,7 +107,7 @@ int main(){
                         }
                         goto keeplogin;
                         break;
-                    case 4: // 미용실 이용
+                    case 7: // 미용실 이용
                         if ((designerId = mngr.selectPerson()) == -1){
                             cout << "현재 이용가능한 미용실 없습니다" << endl;
                             break;
@@ -137,17 +137,17 @@ int main(){
                         }
                         goto keeplogin;
                         break;
-                    case 6: // 로그아웃
+                    case 8: // 로그아웃
                         cout << "종료합니다." << endl;
                         exit(1);
                         break;
-                    case 7: // 현금 입금
+                    case 4: // 현금 입금
                         cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>"; 
                         cin >> ptAcc;
                         banker.recvMoney(p->getName(), ptAcc);
                         goto keeplogin;
                         break;
-                    case 8: // 탈퇴 (계정삭제)
+                    case 9: // 탈퇴 (계정삭제)
                         cout << "계정삭제를 진행하겠습니까? [Y/N] >>"; 
                         cin >> res;
                         while (res != "Y" && res != "N"){
@@ -162,46 +162,11 @@ int main(){
                         }else
                             cout << ">> 계정삭제가 취소되었습니다." << endl;
                         break;    
-                    case 9: // 9번 계좌확인을 3번으로함
+                    case 2: // 9번 계좌확인을 3번으로함
                         itShowAcc=banker.getIterbyName(p->getName());
                         banker.showAccount(itShowAcc);
                         goto keeplogin;
                         break;
-                    cout << ">> " << p2->getName() << " 디자이너가 미용을 완료했습니다" << endl;
-                    cout << "\n>> 결제가 진행됩니다" << endl;
-                    if (banker.sendMoney(p, p2, amount))
-                        cout << ">> 결제 후 " << p->getName() <<" 잔액: " << banker.getAccountSum(p->getName()) << "원" << endl;
-                    else
-                        cout << ">> 결제를 실패했습니다." << endl;
-                    break;
-                case 5: // 계좌 삭제
-                    delName=p->getName();
-                    if (!banker.delAccount(delName)){
-                        p->convertAccStat(false);
-                    }
-                    break;
-                case 7: // 현금 입금
-                    cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>"; 
-                    cin >> ptAcc;
-                    cout << "입금할 금액을 입력하세요 >>";
-                    cin >> amount;
-                    banker.recvMoney(p->getName(), ptAcc, amount);
-                    break;    
-                case 8: // 탈퇴 (계정삭제)
-                    cout << "계정삭제를 진행하겠습니까? [Y/N] >>"; 
-                    cin >> res;
-                    while (res != "Y" && res != "N"){
-                        cout << "[Y/N]로 입력바랍니다 >>"; 
-                        cin >> res;
-                    }
-                    if (res == "Y"){
-                        cout << ">> 삭제가 진행됩니다..." << endl;
-                        mngr.delEmployee(p, banker);
-                        cout << ">> 삭제가 완료되었습니다." << endl;
-                        mngr.showList();
-                    }else
-                        cout << ">> 계정삭제가 취소되었습니다." << endl;
-                    break;    
                 }
             }else{
                 cout << "login 실패" << endl;
