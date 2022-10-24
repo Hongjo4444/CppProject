@@ -19,8 +19,8 @@ public:
     ~Bank();
     bool checkAccDup(int a);
     bool makeAccount(string name, Account** newA);
-    void addAccount(string name);
-    void delAccount(string delName);
+    bool addAccount(string name);
+    bool delAccount(string delName);
     void showAllAccount();
     void showAccount(map<string,vector<Account*>>::iterator it);
     map<string,vector<Account*>>::iterator getIterbyName(string name);////////////person 받아서 하는걸로

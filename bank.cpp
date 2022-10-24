@@ -112,7 +112,7 @@ bool Bank::makeAccount(string name, Account** newA){
     return false;
 }
 
-void Bank::addAccount(string name){
+bool Bank::addAccount(string name){
     Account* newA;
     auto it=accountList.find(name);
     if(accountList.size()==0){
@@ -121,7 +121,7 @@ void Bank::addAccount(string name){
         vA.push_back(newA);
         accountList.insert(pair<string,vector<Account*>>(name, vA));
         cout << "계좌 만들기 성공" << endl;
-        return;
+        return true;
     }
     else{
         bool check=makeAccount(name,&newA);
@@ -129,26 +129,27 @@ void Bank::addAccount(string name){
             if((it->second)[0]->isAccount()=="일반 계좌") (it->second).push_back(newA);
             else if((it->second)[0]->isAccount()=="카카오 계좌") (it->second).insert((it->second).begin(),newA);
             cout << "계좌 만들기 성공" << endl;
-            return;
+            return true;
         }
         else if(check==true && it==accountList.end()){ //원래 계좌가 없던경우 -> 벡터 만들어서 맵에 추가
             vector<Account*> vA;
             vA.push_back(newA);
             accountList.insert(pair<string,vector<Account*>>(name, vA));
-            return;
+            return true;
         }
         else{ //makeAccount 실패한 경우
             cout << "계좌 만들기 실패" << endl;
-            return;
+            return false;
         }
     }
 }
 
-void Bank::delAccount(string delName){
+bool Bank::delAccount(string delName){
+    bool result = true;
     auto it=accountList.find(delName);
     if(it==accountList.end()) {
         cout << "계좌가 없습니다" << endl;
-        return;
+        return false;
     }
     else if(it!=accountList.end()){
         int choose;
@@ -167,7 +168,10 @@ void Bank::delAccount(string delName){
                     }
                     else{
                         (it->second).erase((it->second).begin());
-                        if((it->second).size()==0) accountList.erase(it);
+                        if((it->second).size()==0) {
+                            accountList.erase(it);
+                            result = false;
+                        }
                         cout << "일반 계좌 삭제 완료" << endl;
                         break;
                     }
@@ -182,7 +186,10 @@ void Bank::delAccount(string delName){
                     }
                     else{
                         (it->second).erase((it->second).end()-1);
-                        if((it->second).size()==0) accountList.erase(it);
+                        if((it->second).size()==0) {
+                            accountList.erase(it);
+                            result = false;
+                        }
                         cout << "카카오 계좌 삭제 완료" << endl;
                         break;
                     }
@@ -201,16 +208,19 @@ void Bank::delAccount(string delName){
                     }
                     else{
                         accountList.erase(delName);
-                        if((it->second).size()==0) accountList.erase(it);
+                        if((it->second).size()==0) {
+                            accountList.erase(it);
+                            result = false;
+                        }
                         cout << "계좌 2개 삭제 완료" << endl;
                         break;
                     }
                 case 4:
-                    return;
+                    return result;
             }   
         }
     }
-    return;
+    return result;
 }
 
 void Bank::showAllAccount(){

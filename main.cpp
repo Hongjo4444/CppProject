@@ -55,8 +55,11 @@ int main(){
                 cout << "login 성공: " << p->getName() << endl;
                 switch(funcPage()){
                 case 1: // 계좌 생성
-                    banker.addAccount(p->getName());
-                    // cout << "p->getAccStat()" << p->getAccStat() << endl;
+                    if (banker.addAccount(p->getName())){
+                        p->convertAccStat(true);
+                        // cout << "p->getAccStat()" << p->getAccStat() << endl;
+                    }
+                    
                     break;
                 case 2: // 계좌 송금
                     if (getPerson(mngr, &p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
@@ -121,7 +124,9 @@ int main(){
                     break;
                 case 5: // 계좌 삭제
                     delName=p->getName();
-                    banker.delAccount(delName);
+                    if (!banker.delAccount(delName)){
+                        p->convertAccStat(false);
+                    }
                     break;
                 case 6: // 로그아웃
                     cout << "종료합니다." << endl;
