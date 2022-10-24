@@ -8,7 +8,7 @@ protected:
     int id;
     char gender;
     string job;
-    bool hasAccount = false;
+    bool hasAccount = true;
 public:
     Person();
     Person (string name, int id, char gender, string job="");
@@ -23,7 +23,7 @@ public:
     char getGender();
     string getJob();
     // bool del(); 이것도 필요없어보임
-    string getType();
+    virtual string getType();
     virtual void setCustomerGender(char c) {};
     bool getAccStat() { return hasAccount; }
     void convertAccStat() { hasAccount = !hasAccount; }

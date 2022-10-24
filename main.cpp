@@ -15,11 +15,10 @@ using namespace std;
 int main(){ 
     Bank banker;
     EmployManage mngr;
-    Person p, p2;
+    Person *p, *p2;
     string name, job, type, accType;
     int id, amount, choice, balance, driverId, designerId;
     char gender;
-    vector<Person>::iterator it;
     choice = -1;
     int i = 0;
     srand((unsigned)time(NULL));
@@ -45,23 +44,24 @@ int main(){
             if (job == "택시운전사"){
                 cout << "택시 종류 선택 [일반/우등] >>";
                 cin >> type;
-                mngr.addEmployee(TaxiDriver(name, id, gender, job, type));
+                mngr.addEmployee(new TaxiDriver(name, id, gender, job, type));
             }
             else if (job == "미용사")
-                mngr.addEmployee(SalonDesigner(name, id, gender, job));
+                mngr.addEmployee(new SalonDesigner(name, id, gender, job));
             else
-                mngr.addEmployee(Person(name, id, gender, job));
+                mngr.addEmployee(new Person(name, id, gender, job));
             break;
         case 2: // 로그인
-            if (getPerson(mngr, p, "아이디 입력 >>", "ID는 숫자로만 기입 바랍니다")){
-                cout << "login 성공: " << p.getName() << endl;
+            if (getPerson(mngr, &p, "아이디 입력 >>", "ID는 숫자로만 기입 바랍니다")){
+                cout << "login 성공: " << p->getName() << endl;
                 switch(funcPage()){
                 case 1: // 계좌 생성
-                    banker.addAccount(p);
+                    banker.addAccount(p->getName());
+                    // cout << "p->getAccStat()" << p->getAccStat() << endl;
                     break;
                 case 2: // 계좌 송금
-                    if (getPerson(mngr, p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
-                    balance = banker.getAccountSum(p);
+                    if (getPerson(mngr, &p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
+                    balance = banker.getAccountSum(p->getName());
                     cout << "이체 금액 (송금 가능 금액: " << balance << "[원]) >>";
                     while (true){
                         keyin(amount, "이체 금액은 숫자로 입력 바랍니다");
@@ -73,8 +73,7 @@ int main(){
                             break;
                     }
                     if (banker.sendMoney(p, p2, amount)){
-                        cout << ">> " << p.getName() <<"님 계좌에서 " << p2.getName() << "님 계좌로 " << amount << "원 이체가 완료되었습니다." << endl;
-                        // cout << ">> 이체 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                        cout << ">> " << p->getName() <<"님 계좌에서 " << p2->getName() << "님 계좌로 " << amount << "원 이체가 완료되었습니다." << endl;
                     }else
                         cout << ">> 이체를 실패했습니다." << endl;
                     break;
@@ -86,28 +85,17 @@ int main(){
                         break;
                     }
                     p2 = *(mngr.getPerson(driverId));
-                    amount = p2.calcAmount(); // 거리입력해서 요금 먼저 확인함
+                    amount = p2->calcAmount(); // 거리입력해서 요금 먼저 확인함
                     cout << ">> 요금은 " << amount << "[원] 입니다." << endl;
-                    balance = banker.getAccountSum(p); // 현재 계좌잔액으로 비교해서
+                    balance = banker.getAccountSum(p->getName()); // 현재 계좌잔액으로 비교해서
                     if (balance < amount){
                         cout << "잔액부족으로 승차가 거부되었습니다" << endl;
                         break;
                     }
-                    cout << ">> " << p2.getName() << " 기사님이 선정되었습니다" << endl;
-                    cout << ">> 이동 중";
-                    i = 0;
-                    while (1){
-                        if(i%100000==0) {
-                            putchar('.');
-                            fflush(stdout);
-                            //i=0;
-                        }else if (i==400000)
-                            break;
-                        i++;
-                    }
+                    cout << ">> " << p2->getName() << " 기사님이 선정되었습니다" << endl;
                     cout << "\n>> 결제가 진행됩니다" << endl;
                     if (banker.sendMoney(p, p2, amount))
-                        cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                        cout << ">> 결제 후 " << p->getName() <<" 잔액: " << banker.getAccountSum(p->getName()) << "원" << endl;
                     else
                         cout << ">> 결제를 실패했습니다." << endl;
                     break;
@@ -117,23 +105,23 @@ int main(){
                         break;
                     }
                     p2 = *(mngr.getPerson(designerId));
-                    p2.setCustomerGender(p.getGender());
-                    amount = p2.calcAmount();
+                    p2->setCustomerGender(p->getGender());
+                    amount = p2->calcAmount();
                     cout << ">> 요금은 " << amount << "[원] 입니다." << endl;
-                    balance = banker.getAccountSum(p); // 현재 계좌잔액으로 비교해서
+                    balance = banker.getAccountSum(p->getName()); // 현재 계좌잔액으로 비교해서
                     if (balance < amount){
                         cout << "잔액부족으로 미용실 출입이 제한됩니다" << endl;
                         break;
                     }
-                    cout << ">> " << p2.getName() << " 디자이너가 미용을 완료했습니다" << endl;
+                    cout << ">> " << p2->getName() << " 디자이너가 미용을 완료했습니다" << endl;
                     cout << "\n>> 결제가 진행됩니다" << endl;
                     if (banker.sendMoney(p, p2, amount))
-                        cout << ">> 결제 후 " << p.getName() <<" 잔액: " << banker.getAccountSum(p) << "원" << endl;
+                        cout << ">> 결제 후 " << p->getName() <<" 잔액: " << banker.getAccountSum(p->getName()) << "원" << endl;
                     else
                         cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 case 5: // 계좌 삭제
-                    itForDel=banker.getIterbyName(p.getName());
+                    itForDel=banker.getIterbyName(p->getName());
                     banker.showAccount(itForDel);
                     break;
                 case 6: // 로그아웃
@@ -145,7 +133,7 @@ int main(){
                     cin >> ptAcc;
                     cout << "입금할 금액을 입력하세요 >>";
                     cin >> amount;
-                    banker.recvMoney(p,ptAcc,amount);
+                    banker.recvMoney(p->getName(), ptAcc, amount);
 
                     break;    
                 }

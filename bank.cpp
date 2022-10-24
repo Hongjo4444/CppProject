@@ -30,7 +30,7 @@ bool Bank::checkAccDup(int a){
     return true;
 }
 
-bool Bank::makeAccount(Person p, Account** newA){
+bool Bank::makeAccount(string name, Account** newA){
     int choose,account;
     while(1){
         account=rand()%90000000+10000000;
@@ -56,11 +56,11 @@ bool Bank::makeAccount(Person p, Account** newA){
         }
     }
     for(auto it=accountList.begin();it!=accountList.end(); it++){ //계좌 체크하고 만들 수 있으면 만들어서 받아온 newA에 넣기
-        if((p.getName()==it->first) && (it->second).size()==2){
+        if((name==it->first) && (it->second).size()==2){
             cout << "이미 일반 계좌,카카오 계좌가 모두 있습니다." << endl;
             return false;
         }
-        else if(p.getName()==it->first && (it->second).size()==1 && (it->second)[0]->isAccount()=="일반 계좌"){
+        else if(name==it->first && (it->second).size()==1 && (it->second)[0]->isAccount()=="일반 계좌"){
             cout << "이미 일반 계좌가 있습니다. 카카오 계좌만 가입 가능합니다.(1:카카오 계좌 가입,2:종료)" << endl;
             while(1){
                 cin >> choose;
@@ -76,7 +76,7 @@ bool Bank::makeAccount(Person p, Account** newA){
                 }
             }
         }
-        else if(p.getName()==it->first && (it->second).size()==1 && (it->second)[0]->isAccount()=="카카오 계좌"){
+        else if(name==it->first && (it->second).size()==1 && (it->second)[0]->isAccount()=="카카오 계좌"){
             cout << "이미 카카오 계좌가 있습니다. 일반 계좌만 가입 가능합니다.(1:일반 계좌 가입,2:종료)" << endl;
             while(1){
                 cin >> choose;
@@ -114,22 +114,19 @@ bool Bank::makeAccount(Person p, Account** newA){
     return false;
 }
 
-void Bank::addAccount(Person& p){
+void Bank::addAccount(string name){
     Account* newA;
-    auto it=accountList.find(p.getName());
+    auto it=accountList.find(name);
     if(accountList.size()==0){
-        makeAccount(p, &newA); //처음 켰을때(리스트 빈 경우)
+        makeAccount(name, &newA); //처음 켰을때(리스트 빈 경우)
         vector<Account*> vA;
         vA.push_back(newA);
-        accountList.insert(pair<string,vector<Account*>>(p.getName(), vA));
+        accountList.insert(pair<string,vector<Account*>>(name, vA));
         cout << "계좌 만들기 성공" << endl;
-        cout << "BEFORE: " << p.getAccStat() << endl;
-        p.convertAccStat();
-        cout << "AFTER: " << p.getAccStat() << endl;
         return;
     }
     else{
-        bool check=makeAccount(p,&newA);
+        bool check=makeAccount(name,&newA);
         if(check==true && it!=accountList.end()){ //원래 계좌가 있던경우 -> 있던 벡터에 추가or있던벡터 리뉴얼
             if((it->second)[0]->isAccount()=="일반 계좌") (it->second).push_back(newA);
             else if((it->second)[0]->isAccount()=="카카오 계좌") (it->second).insert((it->second).begin(),newA);
@@ -139,11 +136,7 @@ void Bank::addAccount(Person& p){
         else if(check==true && it==accountList.end()){ //원래 계좌가 없던경우 -> 벡터 만들어서 맵에 추가
             vector<Account*> vA;
             vA.push_back(newA);
-            accountList.insert(pair<string,vector<Account*>>(p.getName(), vA));
-            cout << "계좌 만들기 성공" << endl;
-            cout << "BEFORE: " << p.getAccStat() << endl;
-            p.convertAccStat();
-            cout << "AFTER: " << p.getAccStat() << endl;
+            accountList.insert(pair<string,vector<Account*>>(name, vA));
             return;
         }
         else{ //makeAccount 실패한 경우
@@ -153,8 +146,7 @@ void Bank::addAccount(Person& p){
     }
 }
 
-void Bank::delAccount(Person p){
-    string delName = p.getName();
+void Bank::delAccount(string delName){
     auto it=accountList.find(delName);
     if(it!=accountList.end()){
         cout << "삭제할 계좌 선택(1:일반 계좌,2:카카오 계좌,3:전체 삭제)" << endl;
@@ -269,9 +261,9 @@ map<string,vector<Account*>>::iterator Bank::getIterbyName(string name){
     return it;
 }
 
-int Bank::getAccountSum(Person p){
+int Bank::getAccountSum(string name){
     int sum=0;
-    auto it=accountList.find(p.getName());
+    auto it=accountList.find(name);
     
     if((it->second).size()==2){
         sum=(it->second)[0]->getBalance()+(it->second)[1]->getBalance()+(it->second)[1]->getPoint();
@@ -297,7 +289,7 @@ int Bank::getBalanceSum(Person p){
     return sum;
 }
 
-bool Bank::sendMoney(Person pf,Person pt,int m){
+bool Bank::sendMoney(Person* pf,Person* pt,int m){
     /// @brief 송금 및 결제 용 함수
     ///         main()에서 송신인 전체 잔액이 내야할 금액보다 크거나 같은거 확인 후 들어와서 해당 사항 체크 안해줌
     /// @param pf : 보내는 사람 Person
@@ -307,15 +299,15 @@ bool Bank::sendMoney(Person pf,Person pt,int m){
     string toAcc;
     int reductionAmount, accIdx;
 
-    auto itf=accountList.find(pf.getName()); //pf 돈 m만큼 감소, 감소 성공하면 pt 돈 m만큼 증가
-    auto itt=accountList.find(pt.getName());
+    auto itf=accountList.find(pf->getName()); //pf 돈 m만큼 감소, 감소 성공하면 pt 돈 m만큼 증가
+    auto itt=accountList.find(pt->getName());
 
     if(itf==accountList.end()){
-        cout << ">> 송신인 " << pf.getName() << "님은 현재 계좌가 없습니다." << endl;
+        cout << ">> 송신인 " << pf->getName() << "님은 현재 계좌가 없습니다." << endl;
         return false;
     }
     if(itt==accountList.end()){
-        cout << ">> 수신인 " << pt.getName() << "님은 현재 계좌가 없습니다." << endl;
+        cout << ">> 수신인 " << pt->getName() << "님은 현재 계좌가 없습니다." << endl;
         return false;
     }
 
@@ -332,20 +324,24 @@ bool Bank::sendMoney(Person pf,Person pt,int m){
     
     //// 2. 송신인(나) 계좌에서 차감
     while (m > 0){
-        // 1) 포인트 있는 경우
-        if ((itf->second)[0]->getPoint() > 0){
-            reductionAmount = subtract(&(itf->second)[0], m, true);
-            cout << "*** 포인트가 존재해서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
-        }
-        // 2) 포인트 없는 경우
-        else{
-            if((itf->second).size()==1)
-            {   // (1) 계좌 1개만 있는경우
+        if((itf->second).size()==1)
+        {   // (1) 계좌 1개만 있는경우 (그게 카카오계좌인 경우, 카카오계좌가 0번째에 있음)
+            if ((itf->second)[0]->getPoint() > 0){ 
+                // 포인트가 있는경우
+                reductionAmount = subtract(&(itf->second)[0], m, true);
+                cout << "*** 포인트가 존재해서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
+            }else{
+                // 포인트 없는 경우
                 reductionAmount = subtract(&(itf->second)[0], m);
                 cout << "*** " << (itf->second)[0]->isAccount() << "에서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
             }
-            else 
-            {   // (2) 계좌 2개 있는경우
+        }
+        else 
+        {   // (2) 계좌 2개 있는경우 (카카오계좌가 1번째에 있음)
+            if ((itf->second)[1]->getPoint() > 0){ 
+                reductionAmount = subtract(&(itf->second)[1], m, true);
+                cout << "*** 포인트가 존재해서 " << reductionAmount << "[원]만큼 차감됩니다." << endl;
+            }else{
                 cout << "송금을 진행할 계좌를 선택 바랍니다 [일반/카카오] >>";
                 cin >> toAcc;
                 accIdx = toAcc == "일반" ? 0 : 1; // vector<Account> [0]일반, [1]카카오
@@ -359,19 +355,21 @@ bool Bank::sendMoney(Person pf,Person pt,int m){
             }
         }
     }
+
+    
     cout << endl;
     cout << ">>> 송금 완료 후 나의 계좌 상황" << endl;
     showAccount(itf);
     cout << endl;
-    cout << "*** 수신인 " << pt.getName() << "님의 " << (itf->second)[0]->isAccount() << "로 송금 되었습니다." << endl;
+    cout << "*** 수신인 " << pt->getName() << "님의 " << (itf->second)[0]->isAccount() << "로 송금 되었습니다." << endl;
     cout << ">>> 송금 완료 후 수신인의 계좌 상황" << endl;
     showAccount(itt);
     cout << endl;
     return true;
 }
 
-bool Bank::recvMoney(Person pt,int ptAcc, int m){
-    auto itt=accountList.find(pt.getName());
+bool Bank::recvMoney(string name,int ptAcc, int m){
+    auto itt=accountList.find(name);
     if(itt==accountList.end()){
         cout << "받는 사람이 없는 사람입니다" << endl;
         return false;

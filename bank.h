@@ -18,14 +18,14 @@ public:
     Bank();
     ~Bank();
     bool checkAccDup(int a);
-    bool makeAccount(Person p, Account** newA);
-    void addAccount(Person& p);
-    void delAccount(Person p);
+    bool makeAccount(string name, Account** newA);
+    void addAccount(string name);
+    void delAccount(string delName);
     void showAllAccount();
     void showAccount(map<string,vector<Account*>>::iterator it);
     map<string,vector<Account*>>::iterator getIterbyName(string name);////////////person 받아서 하는걸로
-    int getAccountSum(Person p);
+    int getAccountSum(string name);
     int getBalanceSum(Person p);
-    bool sendMoney(Person pf,Person pt,int m);
-    bool recvMoney(Person pt,int ptAcc, int m);
+    bool sendMoney(Person* pf,Person* pt,int m);
+    bool recvMoney(string name,int ptAcc, int m);
 };
