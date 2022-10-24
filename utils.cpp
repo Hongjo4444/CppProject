@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#include <typeinfo>
 
 bool initPage(int& choice){
     string c;
@@ -70,6 +70,7 @@ bool keyin(T& n, string errMsg){ // 입력타입 오류 여부 확인 함수
 
 bool getPerson(EmployManage& mngr, Person** p, string cmdMsg, string errMsg){ 
     int id;
+
     cout << setw(w) << setfill('-') << '-' << endl;
     while (true){
         cout << cmdMsg;
@@ -77,9 +78,13 @@ bool getPerson(EmployManage& mngr, Person** p, string cmdMsg, string errMsg){
     }
 
     vector<Person*>::iterator it = mngr.getPerson(id);
-    if ((*it)->getName() == "")
+
+    if (*it == nullptr){
+        cout << "존재하지 않는 아이디 입니다" << endl;
         return false;
-    *p = *it; //?
+    }
+        
+    *p = *it;
     return true;
 }
 
@@ -94,12 +99,14 @@ int funcPage(){
         cout << "3. 택시 부르기" << endl;
         cout << "4. 미용실 가기" << endl;
         cout << "5. 계좌 삭제" << endl;
-        cout << "6. 계좌 로그아웃" << endl;
+        cout << "6. 로그아웃" << endl;
         cout << "7. 현금 입금" << endl;
+        cout << "8. 탈퇴" << endl;
+        cout << "9. 계좌 확인" << endl;
         cout << setw(w) << setfill('-') << '-' << endl;
         cout << "원하는 기능을 선택해주세요 >>";
         if (keyin(choice, "ID는 숫자로만 기입 바랍니다.")){
-            if (1 <= choice && choice <= 7)
+            if (1 <= choice && choice <= 9)
                 break;
         }
     }

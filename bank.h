@@ -21,6 +21,7 @@ public:
     bool makeAccount(string name, Account** newA);
     bool addAccount(string name);
     bool delAccount(string delName);
+    void delAllAccount(string delName);
     void showAllAccount();
     void showAccount(map<string,vector<Account*>>::iterator it);
     map<string,vector<Account*>>::iterator getIterbyName(string name);////////////person 받아서 하는걸로

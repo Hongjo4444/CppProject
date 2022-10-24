@@ -16,7 +16,7 @@ int main(){
     Bank banker;
     EmployManage mngr;
     Person *p, *p2;
-    string name, job, type, accType, delName;
+    string name, job, type, accType, delName, res;
     int id, amount, choice, balance, driverId, designerId;
     char gender;
     choice = -1;
@@ -128,17 +128,27 @@ int main(){
                         p->convertAccStat(false);
                     }
                     break;
-                case 6: // 로그아웃
-                    cout << "종료합니다." << endl;
-                    exit(1);
-                    break;
                 case 7: // 현금 입금
                     cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>"; 
                     cin >> ptAcc;
                     cout << "입금할 금액을 입력하세요 >>";
                     cin >> amount;
                     banker.recvMoney(p->getName(), ptAcc, amount);
-
+                    break;    
+                case 8: // 탈퇴 (계정삭제)
+                    cout << "계정삭제를 진행하겠습니까? [Y/N] >>"; 
+                    cin >> res;
+                    while (res != "Y" && res != "N"){
+                        cout << "[Y/N]로 입력바랍니다 >>"; 
+                        cin >> res;
+                    }
+                    if (res == "Y"){
+                        cout << ">> 삭제가 진행됩니다..." << endl;
+                        mngr.delEmployee(p, banker);
+                        cout << ">> 삭제가 완료되었습니다." << endl;
+                        mngr.showList();
+                    }else
+                        cout << ">> 계정삭제가 취소되었습니다." << endl;
                     break;    
                 }
             }else{
