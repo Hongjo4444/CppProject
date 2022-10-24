@@ -15,5 +15,5 @@ public:
     //int calcAmount();  필요없는 듯
     vector<Person*>::iterator getPerson(int id); // Person*로 바꿈
     vector<Person*>::iterator getPerson(string name);
-    int selectPerson(string type="");
+    int selectPerson(Person *p, string type="");
 };

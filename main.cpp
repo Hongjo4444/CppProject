@@ -53,7 +53,7 @@ int main(){
             if (getPerson(mngr, &p, "아이디 입력 >>", "ID는 숫자로만 기입 바랍니다")){
                 cout << "login 성공: " << p->getName() << endl;
                 keeplogin:
-                    switch(funcPage()){
+                    switch(funcPage(p)){
                     case 1: // 계좌 생성
                         if (banker.addAccount(p->getName())){
                             p->convertAccStat(true);
@@ -112,7 +112,7 @@ int main(){
                     case 6: // 택시 이용
                         cout << "이용할 택시 종류 선택 [우등/일반] >>";
                         cin >> type;
-                        if ((driverId = mngr.selectPerson(type)) == -1){
+                        if ((driverId = mngr.selectPerson(p, type)) == -1){
                             cout << "현재 이용가능한 택시가 없습니다" << endl;
                             goto keeplogin;
                             break;
@@ -136,7 +136,7 @@ int main(){
                         goto keeplogin;
                         break;
                     case 7: // 미용실 이용
-                        if ((designerId = mngr.selectPerson()) == -1){
+                        if ((designerId = mngr.selectPerson(p)) == -1){
                             cout << "현재 이용가능한 미용실 없습니다" << endl;
                             goto keeplogin;
                             break;

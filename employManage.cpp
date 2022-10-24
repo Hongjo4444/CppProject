@@ -62,22 +62,22 @@ vector<Person*>::iterator EmployManage::getPerson(string name)
     return it;
 }
 
-int EmployManage::selectPerson(string type)
+int EmployManage::selectPerson(Person* p, string type)
 {
     /// 택시운전사의 id 반환
     int n;
     vector<int> candidates; // 해당 type조건에 해당하는 후보 운전사들
 
     if (type == ""){
-        for(Person* p: employee_list){
-            if (p->getJob() == "미용사" && p->getAccStat())
-                candidates.push_back(p->getId());
+        for(Person* pptr: employee_list){
+            if (pptr->getJob() == "미용사" && pptr->getAccStat() && pptr->getName() != p->getName())
+                candidates.push_back(pptr->getId());
         }
     }else{
-        for(Person* p: employee_list){
-            if (p->getJob() == "택시운전사" && p->getAccStat()){
-                if (p->getType() == type){
-                    candidates.push_back(p->getId());
+        for(Person* pptr: employee_list){
+            if (pptr->getJob() == "택시운전사" && pptr->getAccStat() && pptr->getName() != p->getName()){
+                if (pptr->getType() == type){
+                    candidates.push_back(pptr->getId());
                 }
             }
         }

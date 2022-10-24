@@ -90,10 +90,12 @@ bool getPerson(EmployManage& mngr, Person** p, string cmdMsg, string errMsg){
 
 
 
-int funcPage(){
+int funcPage(Person *p){
     int choice;
     while (true){
-        cout << setw(w) << setfill('-') << '-' << endl;
+        cout << setw(w/2) << setfill('-') << '-';
+        cout << p->getName();
+        cout << setw(w/2) << setfill('-') << '-' << endl;
         cout << "1. 계좌 생성" << endl;
         cout << "2. 계좌 확인" << endl;
         cout << "3. 계좌 이체" << endl;
