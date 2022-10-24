@@ -15,7 +15,7 @@ using namespace std;
 int main(){ 
     Bank banker;
     EmployManage mngr;
-    Person p, p2;
+    Person *p, *p2;
     string name, job, type, accType, delName;
     int id, amount, choice, balance, driverId, designerId;
     char gender;
@@ -120,7 +120,7 @@ int main(){
                         cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 case 5: // 계좌 삭제
-                    delName=p.getName();
+                    delName=p->getName();
                     banker.delAccount(delName);
                     break;
                 case 6: // 로그아웃
