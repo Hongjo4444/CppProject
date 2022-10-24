@@ -64,6 +64,11 @@ int main(){
                         goto keeplogin;
                         break;
                     case 3: // 계좌 송금
+                        if(!p->getAccStat()){
+                            cout << "계좌가 없습니다" << endl;
+                            goto keeplogin;
+                            break;
+                        }
                         if (getPerson(mngr, &p2, "받는 사람 아이디 >>", "ID는 숫자로만 기입 바랍니다"))
                         balance = banker.getAccountSum(p->getName());
                         cout << "이체 금액 (송금 가능 금액: " << balance << "[원]) >>";
@@ -88,6 +93,7 @@ int main(){
                         cin >> type;
                         if ((driverId = mngr.selectPerson(type)) == -1){
                             cout << "현재 이용가능한 택시가 없습니다" << endl;
+                            goto keeplogin;
                             break;
                         }
                         p2 = *(mngr.getPerson(driverId));
@@ -96,6 +102,7 @@ int main(){
                         balance = banker.getAccountSum(p->getName()); // 현재 계좌잔액으로 비교해서
                         if (balance < amount){
                             cout << "잔액부족으로 승차가 거부되었습니다" << endl;
+                            goto keeplogin;
                             break;
                         }
                         cout << ">> " << p2->getName() << " 기사님이 선정되었습니다" << endl;
@@ -110,6 +117,7 @@ int main(){
                     case 7: // 미용실 이용
                         if ((designerId = mngr.selectPerson()) == -1){
                             cout << "현재 이용가능한 미용실 없습니다" << endl;
+                            goto keeplogin;
                             break;
                         }
                         p2 = *(mngr.getPerson(designerId));
@@ -119,6 +127,7 @@ int main(){
                         balance = banker.getAccountSum(p->getName()); // 현재 계좌잔액으로 비교해서
                         if (balance < amount){
                             cout << "잔액부족으로 미용실 출입이 제한됩니다" << endl;
+                            goto keeplogin;
                             break;
                         }
                         cout << ">> " << p2->getName() << " 디자이너가 미용을 완료했습니다" << endl;
@@ -162,7 +171,7 @@ int main(){
                         }else
                             cout << ">> 계정삭제가 취소되었습니다." << endl;
                         break;    
-                    case 2: // 9번 계좌확인을 3번으로함
+                    case 2: //계좌확인
                         itShowAcc=banker.getIterbyName(p->getName());
                         banker.showAccount(itShowAcc);
                         goto keeplogin;

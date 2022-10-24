@@ -256,27 +256,28 @@ void Bank::showAccount(map<string,vector<Account*>>::iterator it){
         cout << left << setw(18) << setfill(' ') << (it->second)[1]->getPoint() << endl;
         cout << endl;
     }
+    else if((it->second).size()==1 && (it->second)[0]->isAccount()=="일반 계좌"){
+        cout << "이름 : " << left << setw(11) << setfill(' ')  << it->first;
+        cout << left << setw(29) << setfill(' ') << "계좌번호(8자리)";
+        cout << left << setw(w) << setfill(' ') << "잔액" << endl;
+        cout << left << setw(24) << setfill(' ') << "일반 계좌";
+        cout << left << setw(22) << setfill(' ') << (it->second)[0]->getAccount();
+        cout << left << setw(w) << setfill(' ') << (it->second)[0]->getBalance() << endl;
+        cout << endl;
+    }
+    else if((it->second).size()==1 && (it->second)[0]->isAccount()=="카카오 계좌"){
+        cout << "이름 : " << left << setw(11) << setfill(' ')  << it->first;
+        cout << left << setw(29) << setfill(' ') << "계좌번호(8자리)";
+        cout << left << setw(w) << setfill(' ') << "잔액";
+        cout << left << setw(18) << setfill(' ') << "포인트" << endl;
+        cout << left << setw(25) << setfill(' ') << "카카오 계좌";
+        cout << left << setw(22) << setfill(' ') << (it->second)[0]->getAccount();
+        cout << left << setw(19) << setfill(' ') << (it->second)[0]->getBalance();
+        cout << left << setw(18) << setfill(' ') << (it->second)[0]->getPoint() << endl;
+        cout << endl;
+    }
     else{
-        if((it->second)[0]->isAccount()=="일반 계좌"){
-            cout << "이름 : " << left << setw(11) << setfill(' ')  << it->first;
-            cout << left << setw(29) << setfill(' ') << "계좌번호(8자리)";
-            cout << left << setw(w) << setfill(' ') << "잔액" << endl;
-            cout << left << setw(24) << setfill(' ') << "일반 계좌";
-            cout << left << setw(22) << setfill(' ') << (it->second)[0]->getAccount();
-            cout << left << setw(w) << setfill(' ') << (it->second)[0]->getBalance() << endl;
-            cout << endl;
-        }
-        else{
-            cout << "이름 : " << left << setw(11) << setfill(' ')  << it->first;
-            cout << left << setw(29) << setfill(' ') << "계좌번호(8자리)";
-            cout << left << setw(w) << setfill(' ') << "잔액";
-            cout << left << setw(18) << setfill(' ') << "포인트" << endl;
-            cout << left << setw(25) << setfill(' ') << "카카오 계좌";
-            cout << left << setw(22) << setfill(' ') << (it->second)[0]->getAccount();
-            cout << left << setw(19) << setfill(' ') << (it->second)[0]->getBalance();
-            cout << left << setw(18) << setfill(' ') << (it->second)[0]->getPoint() << endl;
-            cout << endl;
-        }
+        cout << "계좌가 없습니다" << endl;
     }
 }
 
@@ -394,7 +395,7 @@ bool Bank::recvMoney(string name,int ptAcc){
     int recvAmount;
     auto itt=accountList.find(name);
     if(itt==accountList.end()){
-        cout << "받는 사람이 없는 사람입니다" << endl;
+        cout << "계좌가 없습니다." << endl;
         return false;
     }
     else{
