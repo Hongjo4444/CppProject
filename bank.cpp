@@ -381,7 +381,8 @@ bool Bank::sendMoney(Person* pf,Person* pt,int m){
     return true;
 }
 
-bool Bank::recvMoney(string name,int ptAcc, int m){
+bool Bank::recvMoney(string name,int ptAcc){
+    int recvAmount;
     auto itt=accountList.find(name);
     if(itt==accountList.end()){
         cout << "받는 사람이 없는 사람입니다" << endl;
@@ -389,20 +390,24 @@ bool Bank::recvMoney(string name,int ptAcc, int m){
     }
     else{
         if((itt->second).size()==2){
+            cout << "입금할 금액을 입력하세요 >>";
+            cin >> recvAmount;
             if(ptAcc==1){
-                (itt->second)[0]->setBalance((itt->second)[0]->getBalance()+m);
+                (itt->second)[0]->setBalance((itt->second)[0]->getBalance()+recvAmount);
                 cout << "지급 성공" << endl;
                 return true;
             }
             else{
-                (itt->second)[1]->setBalance((itt->second)[1]->getBalance()+m);
+                (itt->second)[1]->setBalance((itt->second)[1]->getBalance()+recvAmount);
                 cout << "지급 성공" << endl;
                 return true;
             }
         }
         else if((itt->second).size()==1 && ptAcc==1){ //1인데->받는사람 일반 계좌가 없는경우
             if((itt->second)[0]->isAccount()=="일반 계좌"){
-                (itt->second)[0]->setBalance((itt->second)[0]->getBalance()+m);
+                cout << "입금할 금액을 입력하세요 >>";
+                cin >> recvAmount;
+                (itt->second)[0]->setBalance((itt->second)[0]->getBalance()+recvAmount);
                 cout << "지급 성공" << endl;
                 return true;
             }
@@ -413,7 +418,9 @@ bool Bank::recvMoney(string name,int ptAcc, int m){
         }
         else{ //계좌 0개인 경우는 없음
             if((itt->second)[0]->isAccount()=="카카오 계좌"){
-                (itt->second)[0]->setBalance((itt->second)[0]->getBalance()+m);
+                cout << "입금할 금액을 입력하세요 >>";
+                cin >> recvAmount;
+                (itt->second)[0]->setBalance((itt->second)[0]->getBalance()+recvAmount);
                 cout << "지급 성공" << endl;
                 return true;
             }
