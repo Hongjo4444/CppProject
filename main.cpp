@@ -22,7 +22,6 @@ int main(){
     choice = -1;
     int i = 0;
     srand((unsigned)time(NULL));
-    map<string,vector<Account*>>::iterator itForDel;
     int ptAcc;
 
     ifstream fin("data.txt");
