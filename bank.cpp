@@ -37,7 +37,7 @@ bool Bank::makeAccount(string name, Account** newA){
         if(checkAccDup(account)) break;
     }
     if(accountList.size()==0){
-        std::cout << "일반 계좌, 카카오 계좌 모두 가입 가능합니다.(1:일반 계좌 가입,2:카카오 계좌 가입)" << endl;
+        std::cout << "일반 계좌, 카카오 계좌 모두 가입 가능합니다.(1:일반 계좌 가입,2:카카오 계좌 가입) >>";
         cin >> choose;
         while(1){
             if(choose==1){
