@@ -10,7 +10,7 @@ SalonDesigner::SalonDesigner(string name, int id, char gender, string job)
 void SalonDesigner::showMenu()
 {
     int w = 20;
-    cout << left << setw(w) << setfill(' ');
+    cout << left << setw(w) << setfill(' ') << " ";
     cout << left << setw(w) << setfill(' ') << "남";
     cout << left << setw(w) << setfill(' ') << "여" << endl;
 

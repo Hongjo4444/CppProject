@@ -223,6 +223,17 @@ bool Bank::delAccount(string delName){
     return result;
 }
 
+void Bank::delAllAccount(string delName){
+    auto it=accountList.find(delName);
+    if(it==accountList.end()) return;
+    // 모든 계좌 삭제
+    for (auto p : it->second)
+        delete p; 
+    (it->second).clear();
+    // 계좌리스트에서 사람 삭제
+    accountList.erase(delName);
+}
+
 void Bank::showAllAccount(){
     for(auto it=accountList.begin();it!=accountList.end();it++){
         showAccount(it);
@@ -369,11 +380,9 @@ bool Bank::sendMoney(Person* pf,Person* pt,int m){
         }
     }
 
-    
     cout << endl;
     cout << ">>> 송금 완료 후 나의 계좌 상황" << endl;
     showAccount(itf);
-    cout << endl;
     cout << "*** 수신인 " << pt->getName() << "님의 " << (itf->second)[0]->isAccount() << "로 송금 되었습니다." << endl;
     cout << ">>> 송금 완료 후 수신인의 계좌 상황" << endl;
     showAccount(itt);

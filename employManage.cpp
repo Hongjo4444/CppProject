@@ -23,17 +23,14 @@ void EmployManage::addEmployee(Person* p, bool fromDB)
         cout << ">> 추가 되었습니다." << endl;
 }
 
-void EmployManage::delEmployee(Person* p)
+void EmployManage::delEmployee(Person* p, Bank& banker)
 {
-    // Person it = getPerson(p.getId());
+    vector<Person*>::iterator it = getPerson(p->getId());
+    
+    banker.delAllAccount((*it)->getName());
+    employee_list.erase(it);
 
-    // if (it == employee_list.end()){
-    //     cout << "CANNOT DEL - No person : " << p.getName() << endl;
-    // }else{
-    //     employee_list.erase(it);
-    //     cout << p.getName() << " DELETED" << endl;
-    // }
-
+    delete p;
 }
 
 void EmployManage::showList()
@@ -49,6 +46,8 @@ vector<Person*>::iterator EmployManage::getPerson(int id)
     it = find_if(employee_list.begin(), employee_list.end(), 
                     [id] (Person* p) { return (p->getId() == id); }
                     );
+    if (it == employee_list.end())
+        *it = nullptr;
     return it;
 }
 
@@ -58,6 +57,8 @@ vector<Person*>::iterator EmployManage::getPerson(string name)
     it = find_if(employee_list.begin(), employee_list.end(), 
                     [name] (Person* p) { return (p->getName() == name); }
                     );
+    if (it == employee_list.end())
+        *it = nullptr;
     return it;
 }
 
@@ -81,7 +82,12 @@ int EmployManage::selectPerson(string type)
             }
         }
     }
-    cout << "candidates.size(): " << candidates.size() << endl;
+
+    if (type == "")
+        cout << "이용 가능한 미용실 개수: " << candidates.size() << endl;
+    else
+        cout << "이용 가능한 " << type << "택시 개수: " << candidates.size() << endl;
+
     if (candidates.size() == 0)
         return -1;
     else{
