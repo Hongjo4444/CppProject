@@ -10,8 +10,6 @@ using namespace std;
 #include "bank.h"
 #include "utils.h"
 
-
-
 int main(){ 
     Bank banker;
     EmployManage mngr;
@@ -63,6 +61,11 @@ int main(){
                         }
                         goto keeplogin;
                         break;
+                    case 2: //계좌확인
+                        itShowAcc=banker.getIterbyName(p->getName());
+                        banker.showAccount(itShowAcc);
+                        goto keeplogin;
+                        break;
                     case 3: // 계좌 송금
                         if(!p->getAccStat()){
                             cout << "계좌가 없습니다" << endl;
@@ -85,6 +88,24 @@ int main(){
                             cout << ">> " << p->getName() <<"님 계좌에서 " << p2->getName() << "님 계좌로 " << amount << "원 이체가 완료되었습니다." << endl;
                         }else{
                             cout << ">> 이체를 실패했습니다." << endl;
+                        }
+                        goto keeplogin;
+                        break;
+                    case 4: // 현금 입금
+                        if(!p->getAccStat()){
+                            cout << "계좌가 없습니다" << endl;
+                            goto keeplogin;
+                            break;
+                        }
+                        cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>"; 
+                        cin >> ptAcc;
+                        banker.recvMoney(p->getName(), ptAcc);
+                        goto keeplogin;
+                        break;
+                    case 5: // 계좌 삭제
+                        delName=p->getName();
+                        if (!banker.delAccount(delName)){
+                            p->convertAccStat(false);
                         }
                         goto keeplogin;
                         break;
@@ -139,22 +160,9 @@ int main(){
                         }
                         goto keeplogin;
                         break;
-                    case 5: // 계좌 삭제
-                        delName=p->getName();
-                        if (!banker.delAccount(delName)){
-                            p->convertAccStat(false);
-                        }
-                        goto keeplogin;
-                        break;
                     case 8: // 로그아웃
                         cout << "종료합니다." << endl;
-                        exit(1);
-                        break;
-                    case 4: // 현금 입금
-                        cout << "입금 은행을 선택하세요(1:일반 계좌,2:카카오 계좌)) >>"; 
-                        cin >> ptAcc;
-                        banker.recvMoney(p->getName(), ptAcc);
-                        goto keeplogin;
+                        // exit(1);
                         break;
                     case 9: // 탈퇴 (계정삭제)
                         cout << "계정삭제를 진행하겠습니까? [Y/N] >>"; 
@@ -171,11 +179,6 @@ int main(){
                         }else
                             cout << ">> 계정삭제가 취소되었습니다." << endl;
                         break;    
-                    case 2: //계좌확인
-                        itShowAcc=banker.getIterbyName(p->getName());
-                        banker.showAccount(itShowAcc);
-                        goto keeplogin;
-                        break;
                 }
             }else{
                 cout << "login 실패" << endl;
