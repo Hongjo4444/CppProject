@@ -146,8 +146,11 @@ void Bank::addAccount(string name){
 
 void Bank::delAccount(string delName){
     auto it=accountList.find(delName);
-    if(it!=accountList.end()){
-        cout << "삭제할 계좌 선택(1:일반 계좌,2:카카오 계좌,3:전체 삭제)" << endl;
+    if(it==accountList.end()) {
+        cout << "계좌가 없습니다" << endl;
+        return;
+    }
+    else if(it!=accountList.end()){
         int choose;
         while(1){
             cout << "삭제할 계좌 선택(1:일반 계좌,2:카카오 계좌,3:전체 삭제,4:취소)" << endl;
@@ -197,7 +200,7 @@ void Bank::delAccount(string delName){
                         break;
                     }
                     else{
-                        accountList.erase(p.getName());
+                        accountList.erase(delName);
                         if((it->second).size()==0) accountList.erase(it);
                         cout << "계좌 2개 삭제 완료" << endl;
                         break;

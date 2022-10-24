@@ -15,8 +15,8 @@ using namespace std;
 int main(){ 
     Bank banker;
     EmployManage mngr;
-    Person *p, *p2;
-    string name, job, type, accType;
+    Person p, p2;
+    string name, job, type, accType, delName;
     int id, amount, choice, balance, driverId, designerId;
     char gender;
     choice = -1;
@@ -120,8 +120,8 @@ int main(){
                         cout << ">> 결제를 실패했습니다." << endl;
                     break;
                 case 5: // 계좌 삭제
-                    itForDel=banker.getIterbyName(p->getName());
-                    banker.showAccount(itForDel);
+                    delName=p.getName();
+                    banker.delAccount(delName);
                     break;
                 case 6: // 로그아웃
                     cout << "종료합니다." << endl;
