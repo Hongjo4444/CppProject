@@ -6,15 +6,15 @@ using namespace std;
 bool EmployManage::checkList(string name)
 {
     for(auto person: employee_list){
-        if (person.getName() == name)
+        if (person->getName() == name)
             return true;
     }
     return false;
 }
 
-void EmployManage::addEmployee(Person p, bool fromDB)
+void EmployManage::addEmployee(Person* p, bool fromDB)
 {
-    if (checkList(p.getName())){
+    if (checkList(p->getName())){
         cout << ">> 이미 존재하는 이름입니다." << endl;
         return;
     }
@@ -23,7 +23,7 @@ void EmployManage::addEmployee(Person p, bool fromDB)
         cout << ">> 추가 되었습니다." << endl;
 }
 
-void EmployManage::delEmployee(Person p)
+void EmployManage::delEmployee(Person* p)
 {
     // Person it = getPerson(p.getId());
 
@@ -39,24 +39,24 @@ void EmployManage::delEmployee(Person p)
 void EmployManage::showList()
 {
     for(auto p: employee_list){
-        cout << p.getId() << '\t' << p.getName() << '\t' << p.getGender() << '\t' << p.getJob() << endl;
+        cout << p->getId() << '\t' << p->getName() << '\t' << p->getGender() << '\t' << p->getJob() << endl;
     }
 }
 
-vector<Person>::iterator EmployManage::getPerson(int id)
+vector<Person*>::iterator EmployManage::getPerson(int id)
 {
-    vector<Person>::iterator it;
+    vector<Person*>::iterator it;
     it = find_if(employee_list.begin(), employee_list.end(), 
-                    [id] (Person p) { return (p.getId() == id); }
+                    [id] (Person* p) { return (p->getId() == id); }
                     );
     return it;
 }
 
-vector<Person>::iterator EmployManage::getPerson(string name)
+vector<Person*>::iterator EmployManage::getPerson(string name)
 {
-    vector<Person>::iterator it;
+    vector<Person*>::iterator it;
     it = find_if(employee_list.begin(), employee_list.end(), 
-                    [name] (Person p) { return (p.getName() == name); }
+                    [name] (Person* p) { return (p->getName() == name); }
                     );
     return it;
 }
@@ -68,20 +68,20 @@ int EmployManage::selectPerson(string type)
     vector<int> candidates; // 해당 type조건에 해당하는 후보 운전사들
 
     if (type == ""){
-        for(Person p: employee_list){
-            if (p.getJob() == "미용사" && p.getAccStat())
-                candidates.push_back(p.getId());
+        for(Person* p: employee_list){
+            if (p->getJob() == "미용사" && p->getAccStat())
+                candidates.push_back(p->getId());
         }
     }else{
-        for(Person p: employee_list){
-            if (p.getJob() == "택시운전사" && p.getAccStat()){
-                if (p.getType() == type){
-                    candidates.push_back(p.getId());
+        for(Person* p: employee_list){
+            if (p->getJob() == "택시운전사" && p->getAccStat()){
+                if (p->getType() == type){
+                    candidates.push_back(p->getId());
                 }
             }
         }
     }
-    
+    cout << "candidates.size(): " << candidates.size() << endl;
     if (candidates.size() == 0)
         return -1;
     else{
