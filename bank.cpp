@@ -238,7 +238,7 @@ void Bank::showAccount(map<string,vector<Account*>>::iterator it){
         cout << left << setw(w) << setfill(' ') << (it->second)[0]->getBalance() << endl;
         cout << left << setw(25) << setfill(' ') << "카카오 계좌";
         cout << left << setw(22) << setfill(' ') << (it->second)[1]->getAccount();
-        cout << left << setw(18) << setfill(' ') << (it->second)[1]->getBalance();
+        cout << left << setw(19) << setfill(' ') << (it->second)[1]->getBalance();
         cout << left << setw(18) << setfill(' ') << (it->second)[1]->getPoint() << endl;
         cout << endl;
     }
@@ -259,7 +259,7 @@ void Bank::showAccount(map<string,vector<Account*>>::iterator it){
             cout << left << setw(18) << setfill(' ') << "포인트" << endl;
             cout << left << setw(25) << setfill(' ') << "카카오 계좌";
             cout << left << setw(22) << setfill(' ') << (it->second)[0]->getAccount();
-            cout << left << setw(18) << setfill(' ') << (it->second)[0]->getBalance();
+            cout << left << setw(19) << setfill(' ') << (it->second)[0]->getBalance();
             cout << left << setw(18) << setfill(' ') << (it->second)[0]->getPoint() << endl;
             cout << endl;
         }
