@@ -13,7 +13,7 @@ bool initPage(int& choice){
     cout << "원하는 기능을 선택해주세요 >>";
     cin >> c;
 
-    if (c == "1" || c == "2" || c == "3" || c == "4"){
+    if (c == "1" || c == "2" || c == "3" || c == "4" || c == "5"){
         choice = stoi(c);
         return true;
     }else{

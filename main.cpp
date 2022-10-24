@@ -189,6 +189,9 @@ int main(){
             exit(1);
             break;
         case 4:
+            mngr.showList();
+            break;            
+        case 5:
             banker.showAllAccount();
             break;            
         }
