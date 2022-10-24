@@ -8,7 +8,7 @@ protected:
     int id;
     char gender;
     string job;
-    bool hasAccount = true;
+    bool hasAccount = false;
 public:
     Person();
     Person (string name, int id, char gender, string job="");
@@ -26,5 +26,5 @@ public:
     virtual string getType();
     virtual void setCustomerGender(char c) {};
     bool getAccStat() { return hasAccount; }
-    void convertAccStat() { hasAccount = !hasAccount; }
+    void convertAccStat(bool stat) { hasAccount = stat; }
 };
